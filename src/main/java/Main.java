@@ -15,6 +15,9 @@ public class Main {
 	 * Game symbol class representation.
 	 */
 	private static final class Symbol {
+		/** Numerical identifier of the symbol. */
+		int id;
+
 		/** Name of the symbol. */
 		String name = "";
 
@@ -31,6 +34,52 @@ public class Main {
 		@Override
 		public String toString() {
 			return name;
+		}
+	}
+
+	/**
+	 * Description of each cluster.
+	 */
+	private static final class Cluster {
+		/** Cluster symbol. */
+		Symbol symbol;
+
+		/** Cluster size. */
+		int count;
+
+		/** Start of the cluster x coordinate. */
+		int x;
+
+		/** Start of the cluster y coordinate. */
+		int y;
+
+		/**
+		 * Constructor with all parameters.
+		 * 
+		 * @param symbol
+		 *            Cluster symbol.
+		 * @param count
+		 *            Cluster size.
+		 * @param x
+		 *            Start of the cluster x coordinate.
+		 * @param y
+		 *            Start of the cluster y coordinate.
+		 */
+		public Cluster(Symbol symbol, int count, int x, int y) {
+			super();
+
+			this.symbol = symbol;
+			this.count = count;
+			this.x = x;
+			this.y = y;
+		}
+
+		/**
+		 * Represent the object content as a string.
+		 */
+		@Override
+		public String toString() {
+			return "" + symbol + " " + count + " " + x + " " + y + "";
 		}
 	}
 
@@ -54,6 +103,7 @@ public class Main {
 		Symbol symbol = null;
 
 		symbol = new Symbol();
+		symbol.id = 1;
 		symbol.name = "LOW01";
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 0.8D);
@@ -66,6 +116,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 2;
 		symbol.name = "LOW02";
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 1D);
@@ -78,6 +129,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 3;
 		symbol.name = "LOW03";
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.2D);
@@ -90,6 +142,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 4;
 		symbol.name = "LOW04";
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.5D);
@@ -102,6 +155,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 5;
 		symbol.name = "LOW05";
 		symbol.pays.put(5, 0.3D);
 		symbol.pays.put(9, 2D);
@@ -114,6 +168,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 6;
 		symbol.name = "HIGH06";
 		symbol.pays.put(5, 0.5D);
 		symbol.pays.put(9, 3D);
@@ -126,6 +181,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 7;
 		symbol.name = "HIGH07";
 		symbol.pays.put(5, 0.6D);
 		symbol.pays.put(9, 4D);
@@ -138,6 +194,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 8;
 		symbol.name = "HIGH08";
 		symbol.pays.put(5, 0.7D);
 		symbol.pays.put(9, 5D);
@@ -150,6 +207,7 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 9;
 		symbol.name = "HIGH09";
 		symbol.pays.put(5, 1D);
 		symbol.pays.put(9, 8D);
@@ -162,37 +220,52 @@ public class Main {
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
+		symbol.id = 10;
 		symbol.name = "WILD";
 		SYMBOLS.add(symbol);
 
 		REELS[0] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[1] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[2] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[3] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[4] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[5] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[6] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[7] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8)};
+				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8)};
 	}
 
 	/** Visible screen with the symbols. */
 	private static Symbol view[][] = new Symbol[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
+
+	/** Clusters by id of the symbol. */
+	private static int clusters[][] = new int[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
+
+	/** Current stops on the reels. */
+	private static int stops[] = new int[NUMBER_OF_COLUMNS];
 
 	/**
 	 * Single reels spin to fill the view with symbols.
@@ -201,16 +274,201 @@ public class Main {
 	 *            Screen with symbols reference.
 	 * @param reels
 	 *            Reels strips reference.
+	 * @param stops
+	 *            Indices of the reels stops.
 	 */
-	private static void spin(Symbol[][] view, Symbol[][] reels) {
+	private static void spin(Symbol[][] view, Symbol[][] reels, int stops[]) {
 		/* Loop over each reel. */
 		for (int i = 0; i < view.length && i < reels.length; i++) {
 			/* Select random stop position. */
-			int r = PRNG.nextInt(reels[i].length);
+			int r = stops[i] = PRNG.nextInt(reels[i].length);
 
 			/* Fill the other positions. */
 			for (int j = 0; j < view[i].length; j++) {
 				view[i][j] = reels[i][(r + j) % reels[i].length];
+			}
+		}
+	}
+	/**
+	 * Single reels additional fill the view with symbols.
+	 *
+	 * @param view
+	 *            Screen with symbols reference.
+	 * @param reels
+	 *            Reels strips reference.
+	 * @param stops
+	 *            Indices of the reels stops.
+	 */
+	private static void respin(Symbol[][] view, Symbol[][] reels, int stops[]) {
+		/* Loop over each reel. */
+		for (int i = 0; i < view.length && i < reels.length; i++) {
+			/* Fill missing symbols. */
+			for (int j = view[i].length - 1; j >= 0; j--) {
+				/* If the cell is full do nothing. */
+				if (view[i][j] != null) {
+					continue;
+				}
+
+				/* Get index of the symbol on the reel. */
+				int r = stops[i];
+				stops[i]--;
+				if (stops[i] < 0) {
+					stops[i] = reels[i].length - 1;
+				}
+
+				/* Refill the screen. */
+				view[i][j] = reels[i][r];
+			}
+		}
+	}
+
+	/**
+	 * Recursive procedure for clusters identification.
+	 * 
+	 * @param clusters
+	 *            Output matrix with markings.
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param x
+	 *            Coordinates of the central cell.
+	 * @param y
+	 *            Coordinates of the central cell.
+	 * @param symbol
+	 *            The symbol of the cluster.
+	 * 
+	 * @return Count of symbols part of the cluster.
+	 */
+	private static int mark(int[][] clusters, Symbol[][] view, int x, int y,
+			Symbol symbol) {
+		if (clusters == null) {
+			return 0;
+		}
+
+		if (view == null) {
+			return 0;
+		}
+
+		/* Borders checking should be done. */
+		if (x < 0) {
+			return 0;
+		}
+		if (y < 0) {
+			return 0;
+		}
+		if (x >= clusters.length) {
+			return 0;
+		}
+		if (x >= view.length) {
+			return 0;
+		}
+		if (y >= clusters[x].length) {
+			return 0;
+		}
+		if (y >= view[x].length) {
+			return 0;
+		}
+
+		/* Cells without symbols should not be checked. */
+		if (view[x][y] == null) {
+			return 0;
+		}
+
+		/* If the symbol is not same as the cluster do not handle it. */
+		if (view[x][y].id != symbol.id) {
+			return 0;
+		}
+
+		/* If the cell is already part of another cluster do not handle it. */
+		if (clusters[x][y] != 0) {
+			return 0;
+		}
+
+		/* Mark as part of a cluster and investigate neighbors. */
+		clusters[x][y] = view[x][y].id;
+
+		return 1 + mark(clusters, view, x + 1, y, symbol)
+				+ mark(clusters, view, x - 1, y, symbol)
+				+ mark(clusters, view, x, y + 1, symbol)
+				+ mark(clusters, view, x, y - 1, symbol);
+	}
+
+	/**
+	 * Mark clusters with different numbers. If there is no cluster in cell zero
+	 * is written.
+	 * 
+	 * @param clusters
+	 *            Output matrix with markings.
+	 * @param view
+	 *            Game screen with symbols.
+	 * 
+	 * @return Clusters information as symbol and count of occurrences.
+	 */
+	private static List<Cluster> mark(int clusters[][], Symbol[][] view) {
+		for (int i = 0; i < clusters.length; i++) {
+			for (int j = 0; j < clusters[i].length; j++) {
+				clusters[i][j] = 0;
+			}
+		}
+
+		List<Cluster> result = new ArrayList<Cluster>();
+
+		for (int i = 0; i < view.length; i++) {
+			for (int j = 0; j < view[i].length; j++) {
+				/*
+				 * It is possible view to has null pointers. If the cell is
+				 * marked as already part of a cluster it is not investigated
+				 * anymore.
+				 */
+				if (view[i][j] == null || clusters[i][j] != 0) {
+					continue;
+				}
+
+				/* Mark as part of a cluster and investigate neighbors. */
+				clusters[i][j] = view[i][j].id;
+
+				int count = 1 + mark(clusters, view, i + 1, j, view[i][j])
+						+ mark(clusters, view, i - 1, j, view[i][j])
+						+ mark(clusters, view, i, j + 1, view[i][j])
+						+ mark(clusters, view, i, j - 1, view[i][j]);
+
+				result.add(new Cluster(view[i][j], i, j, count));
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Pack screen after clusters removal.
+	 * 
+	 * @param view
+	 *            Game screen with symbols.
+	 */
+	private static void pack(Symbol[][] view) {
+		/* Do the packing column by column. */
+		for (int i = 0; i < view.length; i++) {
+			boolean done = true;
+
+			for (int j = 0; j < view[i].length - 1; j++) {
+				/* If the cell below is not empty do nothing. */
+				if (view[i][j + 1] != null) {
+					continue;
+				}
+
+				/* There is no need to swap two missing symbols. */
+				if (view[i][j] == null) {
+					continue;
+				}
+
+				done = false;
+				Symbol symbol = view[i][j + 1];
+				view[i][j + 1] = view[i][j];
+				view[i][j] = symbol;
+			}
+
+			/* Stay on the same column if packing is not finished. */
+			if (done == false) {
+				i--;
 			}
 		}
 	}
@@ -224,9 +482,25 @@ public class Main {
 	public static void main(String[] args) {
 		// System.out.println(SYMBOLS);
 		// System.out.println(Arrays.deepToString(REELS));
-		
-		spin(view, REELS);
-		
-		System.out.println(Arrays.deepToString(view));
+
+		spin(view, REELS, stops);
+		mark(clusters, view);
+		// TODO collect(view, cluster, mark(clusters, view));
+		pack(view);
+		respin(view, REELS, stops);
+
+		// System.out.println();
+		// System.out.println(Arrays.deepToString(view).replace("[[", "")
+		// .replace("]]", "").replace("],", "\n").replace(" [", "")
+		// .replace(",", "\t"));
+
+		// System.out.println();
+		// System.out.println((mark(clusters, view) + "").replace("[", "")
+		// .replace("]", "").replace(", ", "\n" + "").replace(" ", "\t"));
+
+		// System.out.println();
+		// System.out.println(Arrays.deepToString(clusters).replace("[[", "")
+		// .replace("]]", "").replace("],", "\n").replace(" [", "")
+		// .replace(",", "\t"));
 	}
 }
