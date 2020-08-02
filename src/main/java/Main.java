@@ -17,7 +17,7 @@ public class Main {
 	private static final class Symbol {
 		/** Symbol kind enumeration. */
 		static enum Kind {
-			NONE, REGULAR, WILD
+			NONE, REGULAR, LOW, HIGH, WILD
 		};
 
 		/** Numerical identifier of the symbol. */
@@ -37,6 +37,35 @@ public class Main {
 		Map<Integer, Double> pays = new HashMap<Integer, Double>();
 
 		/**
+		 * Calculate win multiplier according to the size of the cluster.
+		 * 
+		 * @param count
+		 *            Size of the cluster.
+		 * 
+		 * @return Calculated win.
+		 */
+		public double multiplier(int count) {
+			double multiplier = 0;
+
+			for (Integer prize : pays.keySet()) {
+				/* Multipliers of bigger clusters are missed. */
+				if (prize > count) {
+					continue;
+				}
+
+				/*
+				 * Gets the bigger possible multiplier for the bigger possible
+				 * cluster size.
+				 */
+				if (multiplier < pays.get(prize)) {
+					multiplier = pays.get(prize);
+				}
+			}
+
+			return multiplier;
+		}
+
+		/**
 		 * Represent the object content as a string.
 		 */
 		@Override
@@ -50,16 +79,16 @@ public class Main {
 	 */
 	private static final class Cluster {
 		/** Cluster symbol. */
-		Symbol symbol;
+		private Symbol symbol;
 
 		/** Cluster size. */
-		int count;
+		private int count;
 
 		/** Start of the cluster x coordinate. */
-		int x;
+		private int x;
 
 		/** Start of the cluster y coordinate. */
-		int y;
+		private int y;
 
 		/**
 		 * Constructor with all parameters.
@@ -83,11 +112,116 @@ public class Main {
 		}
 
 		/**
+		 * Cluster symbol getter.
+		 * 
+		 * @return The symbol of the cluster.
+		 */
+		public Symbol symbol() {
+			return symbol;
+		}
+
+		/**
+		 * Cluster symbol setter.
+		 * 
+		 * @param symbol
+		 *            The symbol to set.
+		 */
+		public void symbol(Symbol symbol) {
+			this.symbol = symbol;
+		}
+
+		/**
+		 * Cluster size getter.
+		 * 
+		 * @return The size of the cluster.
+		 */
+		public int count() {
+			return count;
+		}
+
+		/**
+		 * Cluster size setter.
+		 * 
+		 * @param count
+		 *            The size of the cluster to set.
+		 */
+		public void count(int count) {
+			this.count = count;
+		}
+
+		/**
+		 * Cluster start x coordinate getter.
+		 * 
+		 * @return The x coordinate of the cluster.
+		 */
+		public int x() {
+			return x;
+		}
+
+		/**
+		 * Cluster start x coordinate setter.
+		 * 
+		 * @param x
+		 *            The x coordinate of the cluster.
+		 */
+		public void x(int x) {
+			this.x = x;
+		}
+
+		/**
+		 * Cluster start y coordinate getter.
+		 * 
+		 * @return The y coordinate of the cluster.
+		 */
+		public int y() {
+			return y;
+		}
+
+		/**
+		 * Cluster start y coordinate setter.
+		 * 
+		 * @param y
+		 *            The y coordinate of the cluster.
+		 */
+		public void y(int y) {
+			this.y = y;
+		}
+
+		/**
 		 * Represent the object content as a string.
 		 */
 		@Override
 		public String toString() {
 			return "" + symbol + " " + count + " " + x + " " + y + "";
+		}
+	}
+
+	/** It is used for description of every single win. */
+	private static final class Win {
+		/** Bet in the run when the win was achieved. */
+		private double bet;
+
+		/** The achieved win. */
+		private double win;
+
+		/** Information for the cluster used for the winning achievement. */
+		private Cluster cluster;
+
+		/**
+		 * Constructor with all fields as arguments.
+		 * 
+		 * @param bet
+		 *            Bet in the run when the win was achieved.
+		 * @param win
+		 *            The achieved win.
+		 * @param cluster
+		 *            Information for the cluster used for the winning
+		 *            achievement.
+		 */
+		public Win(double bet, double win, Cluster cluster) {
+			this.bet = bet;
+			this.win = win;
+			this.cluster = cluster;
 		}
 	}
 
@@ -113,7 +247,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 1;
 		symbol.name = "LOW01";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.LOW;
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 0.8D);
 		symbol.pays.put(12, 1.2D);
@@ -127,7 +261,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 2;
 		symbol.name = "LOW02";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.LOW;
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 1D);
 		symbol.pays.put(12, 2D);
@@ -141,7 +275,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 3;
 		symbol.name = "LOW03";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.LOW;
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.2D);
 		symbol.pays.put(12, 2.4D);
@@ -155,7 +289,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 4;
 		symbol.name = "LOW04";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.LOW;
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.5D);
 		symbol.pays.put(12, 3D);
@@ -169,7 +303,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 5;
 		symbol.name = "LOW05";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.LOW;
 		symbol.pays.put(5, 0.3D);
 		symbol.pays.put(9, 2D);
 		symbol.pays.put(12, 4D);
@@ -183,7 +317,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 6;
 		symbol.name = "HIGH06";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.HIGH;
 		symbol.pays.put(5, 0.5D);
 		symbol.pays.put(9, 3D);
 		symbol.pays.put(12, 6D);
@@ -197,7 +331,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 7;
 		symbol.name = "HIGH07";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.HIGH;
 		symbol.pays.put(5, 0.6D);
 		symbol.pays.put(9, 4D);
 		symbol.pays.put(12, 8D);
@@ -211,7 +345,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 8;
 		symbol.name = "HIGH08";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.HIGH;
 		symbol.pays.put(5, 0.7D);
 		symbol.pays.put(9, 5D);
 		symbol.pays.put(12, 10D);
@@ -225,7 +359,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 9;
 		symbol.name = "HIGH09";
-		symbol.kind = Symbol.Kind.REGULAR;
+		symbol.kind = Symbol.Kind.HIGH;
 		symbol.pays.put(5, 1D);
 		symbol.pays.put(9, 8D);
 		symbol.pays.put(12, 20D);
@@ -284,6 +418,12 @@ public class Main {
 
 	/** Current stops on the reels. */
 	private static int stops[] = new int[NUMBER_OF_COLUMNS];
+
+	/** Total bet for a single game run. */
+	private static double totalBet = 0;
+
+	/** Total win for a single game run. */
+	private static double totalWin = 0;
 
 	/**
 	 * Single reels spin to fill the view with symbols.
@@ -471,6 +611,34 @@ public class Main {
 	}
 
 	/**
+	 * Collect win.
+	 * 
+	 * @param bet
+	 *            Total bet in the game to be multiplied with the coefficient
+	 *            for each cluster.
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param clusters
+	 *            The topology of the clusters.
+	 * @param list
+	 *            List of clusters information.
+	 */
+	private static List<Win> collect(double bet, Symbol[][] view,
+			int[][] clusters, List<Cluster> list) {
+		List<Win> result = new ArrayList<Win>();
+
+		/* Collect each cluster separately. */
+		for (Cluster info : list) {
+			double win = bet * info.symbol.multiplier(info.count());
+			result.add(new Win(bet, win, info));
+
+			// TODO Remove cluster but keep wilds.
+		}
+
+		return result;
+	}
+
+	/**
 	 * Pack screen after clusters removal.
 	 * 
 	 * @param view
@@ -516,8 +684,7 @@ public class Main {
 		// System.out.println(Arrays.deepToString(REELS));
 
 		spin(view, REELS, stops);
-		mark(clusters, view);
-		// TODO collect(view, cluster, mark(clusters, view));
+		collect(totalBet, view, clusters, mark(clusters, view));
 		pack(view);
 		respin(view, REELS, stops);
 
