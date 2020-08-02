@@ -15,11 +15,19 @@ public class Main {
 	 * Game symbol class representation.
 	 */
 	private static final class Symbol {
+		/** Symbol kind enumeration. */
+		static enum Kind {
+			NONE, REGULAR, WILD
+		};
+
 		/** Numerical identifier of the symbol. */
 		int id;
 
 		/** Name of the symbol. */
 		String name = "";
+
+		/** Symbol kind flag. */
+		Kind kind = Kind.NONE;
 
 		/**
 		 * Paytable of a single symbol. The information is given a list of
@@ -105,6 +113,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 1;
 		symbol.name = "LOW01";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 0.8D);
 		symbol.pays.put(12, 1.2D);
@@ -118,6 +127,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 2;
 		symbol.name = "LOW02";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.1D);
 		symbol.pays.put(9, 1D);
 		symbol.pays.put(12, 2D);
@@ -131,6 +141,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 3;
 		symbol.name = "LOW03";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.2D);
 		symbol.pays.put(12, 2.4D);
@@ -144,6 +155,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 4;
 		symbol.name = "LOW04";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.2D);
 		symbol.pays.put(9, 1.5D);
 		symbol.pays.put(12, 3D);
@@ -157,6 +169,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 5;
 		symbol.name = "LOW05";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.3D);
 		symbol.pays.put(9, 2D);
 		symbol.pays.put(12, 4D);
@@ -170,6 +183,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 6;
 		symbol.name = "HIGH06";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.5D);
 		symbol.pays.put(9, 3D);
 		symbol.pays.put(12, 6D);
@@ -183,6 +197,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 7;
 		symbol.name = "HIGH07";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.6D);
 		symbol.pays.put(9, 4D);
 		symbol.pays.put(12, 8D);
@@ -196,6 +211,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 8;
 		symbol.name = "HIGH08";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 0.7D);
 		symbol.pays.put(9, 5D);
 		symbol.pays.put(12, 10D);
@@ -209,6 +225,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 9;
 		symbol.name = "HIGH09";
+		symbol.kind = Symbol.Kind.REGULAR;
 		symbol.pays.put(5, 1D);
 		symbol.pays.put(9, 8D);
 		symbol.pays.put(12, 20D);
@@ -222,6 +239,7 @@ public class Main {
 		symbol = new Symbol();
 		symbol.id = 10;
 		symbol.name = "WILD";
+		symbol.kind = Symbol.Kind.WILD;
 		SYMBOLS.add(symbol);
 
 		REELS[0] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
@@ -373,8 +391,11 @@ public class Main {
 			return 0;
 		}
 
-		/* If the symbol is not same as the cluster do not handle it. */
-		if (view[x][y].id != symbol.id) {
+		/*
+		 * If the symbol is not same as the cluster's one or wild do not handle
+		 * it.
+		 */
+		if (view[x][y].id != symbol.id && view[x][y].kind != Symbol.Kind.WILD) {
 			return 0;
 		}
 
@@ -384,8 +405,9 @@ public class Main {
 		}
 
 		/* Mark as part of a cluster and investigate neighbors. */
-		clusters[x][y] = view[x][y].id;
+		clusters[x][y] = symbol.id;
 
+		/* Calculate neighbors. */
 		return 1 + mark(clusters, view, x + 1, y, symbol)
 				+ mark(clusters, view, x - 1, y, symbol)
 				+ mark(clusters, view, x, y + 1, symbol)
@@ -404,6 +426,7 @@ public class Main {
 	 * @return Clusters information as symbol and count of occurrences.
 	 */
 	private static List<Cluster> mark(int clusters[][], Symbol[][] view) {
+		/* Clear cluster flags. */
 		for (int i = 0; i < clusters.length; i++) {
 			for (int j = 0; j < clusters[i].length; j++) {
 				clusters[i][j] = 0;
@@ -423,14 +446,23 @@ public class Main {
 					continue;
 				}
 
+				/*
+				 * The wild symbol is not allowed to be part of its own cluster.
+				 */
+				if (view[i][j].kind == Symbol.Kind.WILD) {
+					continue;
+				}
+
 				/* Mark as part of a cluster and investigate neighbors. */
 				clusters[i][j] = view[i][j].id;
 
+				/* Calculate the size of the cluster. */
 				int count = 1 + mark(clusters, view, i + 1, j, view[i][j])
 						+ mark(clusters, view, i - 1, j, view[i][j])
 						+ mark(clusters, view, i, j + 1, view[i][j])
 						+ mark(clusters, view, i, j - 1, view[i][j]);
 
+				/* Keep track of the information for the found cluster. */
 				result.add(new Cluster(view[i][j], i, j, count));
 			}
 		}
