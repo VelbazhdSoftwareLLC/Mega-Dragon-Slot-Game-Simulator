@@ -1,8 +1,7 @@
+package eu.veldsoft.mega.dragon;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -11,220 +10,6 @@ import java.util.Random;
  * @author Todor Balabanov
  */
 public class Main {
-	/**
-	 * Game symbol class representation.
-	 */
-	private static final class Symbol {
-		/** Symbol kind enumeration. */
-		static enum Kind {
-			NONE, REGULAR, LOW, HIGH, WILD
-		};
-
-		/** Numerical identifier of the symbol. */
-		int id;
-
-		/** Name of the symbol. */
-		String name = "";
-
-		/** Symbol kind flag. */
-		Kind kind = Kind.NONE;
-
-		/**
-		 * Paytable of a single symbol. The information is given a list of
-		 * values. The key is the lower limit of symbol count when the value is
-		 * the payout coefficient according to original game rules.
-		 */
-		Map<Integer, Double> pays = new HashMap<Integer, Double>();
-
-		/**
-		 * Calculate win multiplier according to the size of the cluster.
-		 * 
-		 * @param count
-		 *            Size of the cluster.
-		 * 
-		 * @return Calculated win.
-		 */
-		public double multiplier(int count) {
-			double multiplier = 0;
-
-			for (Integer prize : pays.keySet()) {
-				/* Multipliers of bigger clusters are missed. */
-				if (prize > count) {
-					continue;
-				}
-
-				/*
-				 * Gets the bigger possible multiplier for the bigger possible
-				 * cluster size.
-				 */
-				if (multiplier < pays.get(prize)) {
-					multiplier = pays.get(prize);
-				}
-			}
-
-			return multiplier;
-		}
-
-		/**
-		 * Represent the object content as a string.
-		 */
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
-
-	/**
-	 * Description of each cluster.
-	 */
-	private static final class Cluster {
-		/** Cluster symbol. */
-		private Symbol symbol;
-
-		/** Cluster size. */
-		private int count;
-
-		/** Start of the cluster x coordinate. */
-		private int x;
-
-		/** Start of the cluster y coordinate. */
-		private int y;
-
-		/**
-		 * Constructor with all parameters.
-		 * 
-		 * @param symbol
-		 *            Cluster symbol.
-		 * @param count
-		 *            Cluster size.
-		 * @param x
-		 *            Start of the cluster x coordinate.
-		 * @param y
-		 *            Start of the cluster y coordinate.
-		 */
-		public Cluster(Symbol symbol, int count, int x, int y) {
-			super();
-
-			this.symbol = symbol;
-			this.count = count;
-			this.x = x;
-			this.y = y;
-		}
-
-		/**
-		 * Cluster symbol getter.
-		 * 
-		 * @return The symbol of the cluster.
-		 */
-		public Symbol symbol() {
-			return symbol;
-		}
-
-		/**
-		 * Cluster symbol setter.
-		 * 
-		 * @param symbol
-		 *            The symbol to set.
-		 */
-		public void symbol(Symbol symbol) {
-			this.symbol = symbol;
-		}
-
-		/**
-		 * Cluster size getter.
-		 * 
-		 * @return The size of the cluster.
-		 */
-		public int count() {
-			return count;
-		}
-
-		/**
-		 * Cluster size setter.
-		 * 
-		 * @param count
-		 *            The size of the cluster to set.
-		 */
-		public void count(int count) {
-			this.count = count;
-		}
-
-		/**
-		 * Cluster start x coordinate getter.
-		 * 
-		 * @return The x coordinate of the cluster.
-		 */
-		public int x() {
-			return x;
-		}
-
-		/**
-		 * Cluster start x coordinate setter.
-		 * 
-		 * @param x
-		 *            The x coordinate of the cluster.
-		 */
-		public void x(int x) {
-			this.x = x;
-		}
-
-		/**
-		 * Cluster start y coordinate getter.
-		 * 
-		 * @return The y coordinate of the cluster.
-		 */
-		public int y() {
-			return y;
-		}
-
-		/**
-		 * Cluster start y coordinate setter.
-		 * 
-		 * @param y
-		 *            The y coordinate of the cluster.
-		 */
-		public void y(int y) {
-			this.y = y;
-		}
-
-		/**
-		 * Represent the object content as a string.
-		 */
-		@Override
-		public String toString() {
-			return "" + symbol + " " + count + " " + x + " " + y + "";
-		}
-	}
-
-	/** It is used for description of every single win. */
-	private static final class Win {
-		/** Bet in the run when the win was achieved. */
-		private double bet;
-
-		/** The achieved win. */
-		private double win;
-
-		/** Information for the cluster used for the winning achievement. */
-		private Cluster cluster;
-
-		/**
-		 * Constructor with all fields as arguments.
-		 * 
-		 * @param bet
-		 *            Bet in the run when the win was achieved.
-		 * @param win
-		 *            The achieved win.
-		 * @param cluster
-		 *            Information for the cluster used for the winning
-		 *            achievement.
-		 */
-		public Win(double bet, double win, Cluster cluster) {
-			this.bet = bet;
-			this.win = win;
-			this.cluster = cluster;
-		}
-	}
-
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
 
@@ -232,10 +17,10 @@ public class Main {
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
 
 	/** A number of rows on the screen. */
-	private static final int NUMBER_OF_ROWS = 7;
+	private static final int NUMBER_OF_ROWS = 8;
 
 	/** A number of columns on the screen. */
-	private static final int NUMBER_OF_COLUMNS = 8;
+	private static final int NUMBER_OF_COLUMNS = 7;
 
 	/** Array with symbols references as virtual game reels. */
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
@@ -245,135 +30,135 @@ public class Main {
 		Symbol symbol = null;
 
 		symbol = new Symbol();
-		symbol.id = 1;
-		symbol.name = "LOW01";
-		symbol.kind = Symbol.Kind.LOW;
-		symbol.pays.put(5, 0.1D);
-		symbol.pays.put(9, 0.8D);
-		symbol.pays.put(12, 1.2D);
-		symbol.pays.put(15, 3D);
-		symbol.pays.put(18, 6D);
-		symbol.pays.put(20, 15D);
-		symbol.pays.put(22, 30D);
-		symbol.pays.put(25, 60D);
+		symbol.id(1);
+		symbol.name("LOW01");
+		symbol.kind(Symbol.Kind.LOW);
+		symbol.pays().put(5, 0.1D);
+		symbol.pays().put(9, 0.8D);
+		symbol.pays().put(12, 1.2D);
+		symbol.pays().put(15, 3D);
+		symbol.pays().put(18, 6D);
+		symbol.pays().put(20, 15D);
+		symbol.pays().put(22, 30D);
+		symbol.pays().put(25, 60D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 2;
-		symbol.name = "LOW02";
-		symbol.kind = Symbol.Kind.LOW;
-		symbol.pays.put(5, 0.1D);
-		symbol.pays.put(9, 1D);
-		symbol.pays.put(12, 2D);
-		symbol.pays.put(15, 4D);
-		symbol.pays.put(18, 8D);
-		symbol.pays.put(20, 18D);
-		symbol.pays.put(22, 35D);
-		symbol.pays.put(25, 88D);
+		symbol.id(2);
+		symbol.name("LOW02");
+		symbol.kind(Symbol.Kind.LOW);
+		symbol.pays().put(5, 0.1D);
+		symbol.pays().put(9, 1D);
+		symbol.pays().put(12, 2D);
+		symbol.pays().put(15, 4D);
+		symbol.pays().put(18, 8D);
+		symbol.pays().put(20, 18D);
+		symbol.pays().put(22, 35D);
+		symbol.pays().put(25, 88D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 3;
-		symbol.name = "LOW03";
-		symbol.kind = Symbol.Kind.LOW;
-		symbol.pays.put(5, 0.2D);
-		symbol.pays.put(9, 1.2D);
-		symbol.pays.put(12, 2.4D);
-		symbol.pays.put(15, 5D);
-		symbol.pays.put(18, 10D);
-		symbol.pays.put(20, 20D);
-		symbol.pays.put(22, 40D);
-		symbol.pays.put(25, 100D);
+		symbol.id(3);
+		symbol.name("LOW03");
+		symbol.kind(Symbol.Kind.LOW);
+		symbol.pays().put(5, 0.2D);
+		symbol.pays().put(9, 1.2D);
+		symbol.pays().put(12, 2.4D);
+		symbol.pays().put(15, 5D);
+		symbol.pays().put(18, 10D);
+		symbol.pays().put(20, 20D);
+		symbol.pays().put(22, 40D);
+		symbol.pays().put(25, 100D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 4;
-		symbol.name = "LOW04";
-		symbol.kind = Symbol.Kind.LOW;
-		symbol.pays.put(5, 0.2D);
-		symbol.pays.put(9, 1.5D);
-		symbol.pays.put(12, 3D);
-		symbol.pays.put(15, 6D);
-		symbol.pays.put(18, 12D);
-		symbol.pays.put(20, 27D);
-		symbol.pays.put(22, 50D);
-		symbol.pays.put(25, 120D);
+		symbol.id(4);
+		symbol.name("LOW04");
+		symbol.kind(Symbol.Kind.LOW);
+		symbol.pays().put(5, 0.2D);
+		symbol.pays().put(9, 1.5D);
+		symbol.pays().put(12, 3D);
+		symbol.pays().put(15, 6D);
+		symbol.pays().put(18, 12D);
+		symbol.pays().put(20, 27D);
+		symbol.pays().put(22, 50D);
+		symbol.pays().put(25, 120D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 5;
-		symbol.name = "LOW05";
-		symbol.kind = Symbol.Kind.LOW;
-		symbol.pays.put(5, 0.3D);
-		symbol.pays.put(9, 2D);
-		symbol.pays.put(12, 4D);
-		symbol.pays.put(15, 8D);
-		symbol.pays.put(18, 15D);
-		symbol.pays.put(20, 30D);
-		symbol.pays.put(22, 60D);
-		symbol.pays.put(25, 150D);
+		symbol.id(5);
+		symbol.name("LOW05");
+		symbol.kind(Symbol.Kind.LOW);
+		symbol.pays().put(5, 0.3D);
+		symbol.pays().put(9, 2D);
+		symbol.pays().put(12, 4D);
+		symbol.pays().put(15, 8D);
+		symbol.pays().put(18, 15D);
+		symbol.pays().put(20, 30D);
+		symbol.pays().put(22, 60D);
+		symbol.pays().put(25, 150D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 6;
-		symbol.name = "HIGH06";
-		symbol.kind = Symbol.Kind.HIGH;
-		symbol.pays.put(5, 0.5D);
-		symbol.pays.put(9, 3D);
-		symbol.pays.put(12, 6D);
-		symbol.pays.put(15, 12D);
-		symbol.pays.put(18, 25D);
-		symbol.pays.put(20, 50D);
-		symbol.pays.put(22, 100D);
-		symbol.pays.put(25, 200D);
+		symbol.id(6);
+		symbol.name("HIGH06");
+		symbol.kind(Symbol.Kind.HIGH);
+		symbol.pays().put(5, 0.5D);
+		symbol.pays().put(9, 3D);
+		symbol.pays().put(12, 6D);
+		symbol.pays().put(15, 12D);
+		symbol.pays().put(18, 25D);
+		symbol.pays().put(20, 50D);
+		symbol.pays().put(22, 100D);
+		symbol.pays().put(25, 200D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 7;
-		symbol.name = "HIGH07";
-		symbol.kind = Symbol.Kind.HIGH;
-		symbol.pays.put(5, 0.6D);
-		symbol.pays.put(9, 4D);
-		symbol.pays.put(12, 8D);
-		symbol.pays.put(15, 16D);
-		symbol.pays.put(18, 30D);
-		symbol.pays.put(20, 60D);
-		symbol.pays.put(22, 128D);
-		symbol.pays.put(25, 288D);
+		symbol.id(7);
+		symbol.name("HIGH07");
+		symbol.kind(Symbol.Kind.HIGH);
+		symbol.pays().put(5, 0.6D);
+		symbol.pays().put(9, 4D);
+		symbol.pays().put(12, 8D);
+		symbol.pays().put(15, 16D);
+		symbol.pays().put(18, 30D);
+		symbol.pays().put(20, 60D);
+		symbol.pays().put(22, 128D);
+		symbol.pays().put(25, 288D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 8;
-		symbol.name = "HIGH08";
-		symbol.kind = Symbol.Kind.HIGH;
-		symbol.pays.put(5, 0.7D);
-		symbol.pays.put(9, 5D);
-		symbol.pays.put(12, 10D);
-		symbol.pays.put(15, 20D);
-		symbol.pays.put(18, 40D);
-		symbol.pays.put(20, 88D);
-		symbol.pays.put(22, 188D);
-		symbol.pays.put(25, 388D);
+		symbol.id(8);
+		symbol.name("HIGH08");
+		symbol.kind(Symbol.Kind.HIGH);
+		symbol.pays().put(5, 0.7D);
+		symbol.pays().put(9, 5D);
+		symbol.pays().put(12, 10D);
+		symbol.pays().put(15, 20D);
+		symbol.pays().put(18, 40D);
+		symbol.pays().put(20, 88D);
+		symbol.pays().put(22, 188D);
+		symbol.pays().put(25, 388D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 9;
-		symbol.name = "HIGH09";
-		symbol.kind = Symbol.Kind.HIGH;
-		symbol.pays.put(5, 1D);
-		symbol.pays.put(9, 8D);
-		symbol.pays.put(12, 20D);
-		symbol.pays.put(15, 35D);
-		symbol.pays.put(18, 70D);
-		symbol.pays.put(20, 188D);
-		symbol.pays.put(22, 388D);
-		symbol.pays.put(25, 888D);
+		symbol.id(9);
+		symbol.name("HIGH09");
+		symbol.kind(Symbol.Kind.HIGH);
+		symbol.pays().put(5, 1D);
+		symbol.pays().put(9, 8D);
+		symbol.pays().put(12, 20D);
+		symbol.pays().put(15, 35D);
+		symbol.pays().put(18, 70D);
+		symbol.pays().put(20, 188D);
+		symbol.pays().put(22, 388D);
+		symbol.pays().put(25, 888D);
 		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
-		symbol.id = 10;
-		symbol.name = "WILD";
-		symbol.kind = Symbol.Kind.WILD;
+		symbol.id(10);
+		symbol.name("WILD");
+		symbol.kind(Symbol.Kind.WILD);
 		SYMBOLS.add(symbol);
 
 		REELS[0] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
@@ -401,10 +186,6 @@ public class Main {
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
 		REELS[6] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[7] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
@@ -535,7 +316,8 @@ public class Main {
 		 * If the symbol is not same as the cluster's one or wild do not handle
 		 * it.
 		 */
-		if (view[x][y].id != symbol.id && view[x][y].kind != Symbol.Kind.WILD) {
+		if (view[x][y].id() != symbol.id()
+				&& view[x][y].kind() != Symbol.Kind.WILD) {
 			return 0;
 		}
 
@@ -545,7 +327,7 @@ public class Main {
 		}
 
 		/* Mark as part of a cluster and investigate neighbors. */
-		clusters[x][y] = symbol.id;
+		clusters[x][y] = symbol.id();
 
 		/* Calculate neighbors. */
 		return 1 + mark(clusters, view, x + 1, y, symbol)
@@ -589,12 +371,12 @@ public class Main {
 				/*
 				 * The wild symbol is not allowed to be part of its own cluster.
 				 */
-				if (view[i][j].kind == Symbol.Kind.WILD) {
+				if (view[i][j].kind() == Symbol.Kind.WILD) {
 					continue;
 				}
 
 				/* Mark as part of a cluster and investigate neighbors. */
-				clusters[i][j] = view[i][j].id;
+				clusters[i][j] = view[i][j].id();
 
 				/* Calculate the size of the cluster. */
 				int count = 1 + mark(clusters, view, i + 1, j, view[i][j])
