@@ -1,4 +1,7 @@
 package eu.veldsoft.mega.dragon;
+
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -274,11 +277,14 @@ public class Main {
 	 *            Coordinates of the central cell.
 	 * @param symbol
 	 *            The symbol of the cluster.
+	 * @param coordinates
+	 *            List of coordinates for the cells which are part of the
+	 *            cluster.
 	 * 
 	 * @return Count of symbols part of the cluster.
 	 */
 	private static int mark(int[][] clusters, Symbol[][] view, int x, int y,
-			Symbol symbol) {
+			Symbol symbol, List<SimpleEntry<Integer, Integer>> coordinates) {
 		if (clusters == null) {
 			return 0;
 		}
@@ -329,11 +335,56 @@ public class Main {
 		/* Mark as part of a cluster and investigate neighbors. */
 		clusters[x][y] = symbol.id();
 
+		/* Keep track of cell's coordinates. */
+		if (view[x][y].kind() != Symbol.Kind.WILD) {
+			coordinates.add(new SimpleEntry<Integer, Integer>(x, y));
+		}
+
 		/* Calculate neighbors. */
-		return 1 + mark(clusters, view, x + 1, y, symbol)
-				+ mark(clusters, view, x - 1, y, symbol)
-				+ mark(clusters, view, x, y + 1, symbol)
-				+ mark(clusters, view, x, y - 1, symbol);
+		return 1 + mark(clusters, view, x + 1, y, symbol, coordinates)
+				+ mark(clusters, view, x - 1, y, symbol, coordinates)
+				+ mark(clusters, view, x, y + 1, symbol, coordinates)
+				+ mark(clusters, view, x, y - 1, symbol, coordinates);
+	}
+
+	/**
+	 * Calculate center of the cluster.
+	 * 
+	 * @param coordinates
+	 *            List of cluster cells coordinates.
+	 * 
+	 * @return Array with two numbers for x and y coordinates.
+	 */
+	private static int[] center(
+			List<SimpleEntry<Integer, Integer>> coordinates) {
+		int center[] = {-1, -1};
+
+		int min = Integer.MAX_VALUE;
+		for (SimpleEntry<Integer, Integer> a : coordinates) {
+			int distance = 0;
+			for (SimpleEntry<Integer, Integer> b : coordinates) {
+				/* The distance between the cell itself is zero. */
+				if (a == b) {
+					continue;
+				}
+
+				/* Euclidean distance but without a square root. */
+				distance += (a.getKey() - b.getKey())
+						* (a.getKey() - b.getKey())
+						+ (a.getValue() - b.getValue())
+								* (a.getValue() - b.getValue());
+			}
+
+			/* If a shorter distance is found keep cell coordinates. */
+			if (distance < min) {
+				center[0] = a.getKey();
+				center[1] = a.getValue();
+
+				min = distance;
+			}
+		}
+
+		return center;
 	}
 
 	/**
@@ -377,15 +428,29 @@ public class Main {
 
 				/* Mark as part of a cluster and investigate neighbors. */
 				clusters[i][j] = view[i][j].id();
+				List<AbstractMap.SimpleEntry<Integer, Integer>> coordinates = new ArrayList<SimpleEntry<Integer, Integer>>();
+				coordinates.add(new SimpleEntry<Integer, Integer>(i, j));
 
 				/* Calculate the size of the cluster. */
-				int count = 1 + mark(clusters, view, i + 1, j, view[i][j])
-						+ mark(clusters, view, i - 1, j, view[i][j])
-						+ mark(clusters, view, i, j + 1, view[i][j])
-						+ mark(clusters, view, i, j - 1, view[i][j]);
+				int count = 1
+						+ mark(clusters, view, i + 1, j, view[i][j],
+								coordinates)
+						+ mark(clusters, view, i - 1, j, view[i][j],
+								coordinates)
+						+ mark(clusters, view, i, j + 1, view[i][j],
+								coordinates)
+						+ mark(clusters, view, i, j - 1, view[i][j],
+								coordinates);
+
+				/* Calculate the center of the cluster. */
+				int center[] = {i, j};
+				if (count > 1) {
+					center = center(coordinates);
+				}
 
 				/* Keep track of the information for the found cluster. */
-				result.add(new Cluster(view[i][j], i, j, count));
+				result.add(
+						new Cluster(view[i][j], center[0], center[1], count));
 			}
 		}
 
