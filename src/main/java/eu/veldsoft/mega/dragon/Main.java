@@ -28,6 +28,9 @@ public class Main {
 	/** Array with symbols references as virtual game reels. */
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
 
+	/** Reference to wild symbol object. */
+	private static final Symbol WILD;
+
 	/** Static members initialization. */
 	static {
 		Symbol symbol = null;
@@ -158,7 +161,7 @@ public class Main {
 		symbol.pays().put(25, 888D);
 		SYMBOLS.add(symbol);
 
-		symbol = new Symbol();
+		WILD = symbol = new Symbol();
 		symbol.id(10);
 		symbol.name("WILD");
 		symbol.kind(Symbol.Kind.WILD);
@@ -197,8 +200,10 @@ public class Main {
 	/** Visible screen with the symbols. */
 	private static Symbol view[][] = new Symbol[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
 
-	/** Clusters by id of the symbol. */
-	private static int clusters[][] = new int[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
+	/** Clusters bit mask by id of the symbol. */
+	private static int bitmask[][] = new int[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
+
+	private static List<Cluster> clusters = null;
 
 	/** Current stops on the reels. */
 	private static int stops[] = new int[NUMBER_OF_COLUMNS];
@@ -449,12 +454,34 @@ public class Main {
 				}
 
 				/* Keep track of the information for the found cluster. */
-				result.add(
-						new Cluster(view[i][j], center[0], center[1], count));
+				result.add(new Cluster(view[i][j], center[0], center[1], count,
+						coordinates));
 			}
 		}
 
 		return result;
+	}
+
+	/**
+	 * Remove a cluster from the screen.
+	 * 
+	 * @param cluster
+	 *            The cluster to be removed.
+	 * @param view
+	 *            Game screen model reference.
+	 */
+	private static void remove(Cluster cluster, Symbol[][] view) {
+		for (SimpleEntry<Integer, Integer> cell : cluster.coordinates()) {
+			/* Wilds are not removed. */
+			if (view[cell.getKey()][cell.getValue()]
+					.kind() == Symbol.Kind.WILD) {
+				continue;
+			}
+
+			// TODO Null pointers are not a good idea. It is much better symbol
+			// with NONE kind to be used.
+			view[cell.getKey()][cell.getValue()] = null;
+		}
 	}
 
 	/**
@@ -465,21 +492,36 @@ public class Main {
 	 *            for each cluster.
 	 * @param view
 	 *            Game screen with symbols.
-	 * @param clusters
+	 * @param bitmask
 	 *            The topology of the clusters.
-	 * @param list
+	 * @param clusters
 	 *            List of clusters information.
 	 */
 	private static List<Win> collect(double bet, Symbol[][] view,
-			int[][] clusters, List<Cluster> list) {
+			int[][] bitmask, List<Cluster> clusters) {
 		List<Win> result = new ArrayList<Win>();
 
 		/* Collect each cluster separately. */
-		for (Cluster info : list) {
+		for (Cluster info : clusters) {
 			double win = bet * info.symbol.multiplier(info.count());
-			result.add(new Win(bet, win, info));
+			System.err.println(info.count());
+			System.err.println(win);
 
-			// TODO Remove cluster but keep wilds.
+			if (win > 0) {
+				/* Track only a positive win. */
+				result.add(new Win(bet, win, info));
+
+				/* Remove cluster but keep wilds. */
+				remove(info, view);
+
+				/*
+				 * High paying symbols generate wild in the center of the
+				 * winning cluster.
+				 */
+				if (info.symbol().kind() == Symbol.Kind.HIGH) {
+					view[info.x()][info.y()] = WILD;
+				}
+			}
 		}
 
 		return result;
@@ -531,19 +573,20 @@ public class Main {
 		// System.out.println(Arrays.deepToString(REELS));
 
 		spin(view, REELS, stops);
-		collect(totalBet, view, clusters, mark(clusters, view));
-		pack(view);
-		respin(view, REELS, stops);
+		System.out.println(collect(totalBet, view, bitmask,
+				clusters = mark(bitmask, view)));
+		// pack(view);
+		// respin(view, REELS, stops);
 
 		// System.out.println();
 		// System.out.println(Arrays.deepToString(view).replace("[[", "")
 		// .replace("]]", "").replace("],", "\n").replace(" [", "")
 		// .replace(",", "\t"));
-
+		//
 		// System.out.println();
-		// System.out.println((mark(clusters, view) + "").replace("[", "")
+		// System.out.println((mark(bitmask, view) + "").replace("[", "")
 		// .replace("]", "").replace(", ", "\n" + "").replace(" ", "\t"));
-
+		//
 		// System.out.println();
 		// System.out.println(Arrays.deepToString(clusters).replace("[[", "")
 		// .replace("]]", "").replace("],", "\n").replace(" [", "")

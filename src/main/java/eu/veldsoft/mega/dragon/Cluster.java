@@ -1,5 +1,8 @@
 package eu.veldsoft.mega.dragon;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
+
 /**
  * Description of each cluster.
  * 
@@ -9,34 +12,42 @@ final class Cluster {
 	/** Cluster symbol. */
 	Symbol symbol;
 
-	/** Cluster size. */
-	private int count;
-
 	/** Start of the cluster x coordinate. */
 	private int x;
 
 	/** Start of the cluster y coordinate. */
 	private int y;
 
+	/** Cluster size. */
+	private int count;
+
+	/** Coordinates of the symbols in the cluster, but wilds are excluded. */
+	private List<SimpleEntry<Integer, Integer>> coordinates;
+
 	/**
 	 * Constructor with all parameters.
 	 * 
 	 * @param symbol
 	 *            Cluster symbol.
-	 * @param count
-	 *            Cluster size.
 	 * @param x
 	 *            Start of the cluster x coordinate.
 	 * @param y
 	 *            Start of the cluster y coordinate.
+	 * @param count
+	 *            Cluster size.
+	 * @param coordinates
+	 *            Coordinates of the symbols in the cluster, but wilds are
+	 *            excluded.
 	 */
-	public Cluster(Symbol symbol, int count, int x, int y) {
+	public Cluster(Symbol symbol, int x, int y, int count,
+			List<SimpleEntry<Integer, Integer>> coordinates) {
 		super();
 
 		this.symbol = symbol;
-		this.count = count;
 		this.x = x;
 		this.y = y;
+		this.count = count;
+		this.coordinates = coordinates;
 	}
 
 	/**
@@ -56,25 +67,6 @@ final class Cluster {
 	 */
 	public void symbol(Symbol symbol) {
 		this.symbol = symbol;
-	}
-
-	/**
-	 * Cluster size getter.
-	 * 
-	 * @return The size of the cluster.
-	 */
-	public int count() {
-		return count;
-	}
-
-	/**
-	 * Cluster size setter.
-	 * 
-	 * @param count
-	 *            The size of the cluster to set.
-	 */
-	public void count(int count) {
-		this.count = count;
 	}
 
 	/**
@@ -113,6 +105,44 @@ final class Cluster {
 	 */
 	public void y(int y) {
 		this.y = y;
+	}
+
+	/**
+	 * Cluster size getter.
+	 * 
+	 * @return The size of the cluster.
+	 */
+	public int count() {
+		return count;
+	}
+
+	/**
+	 * Cluster size setter.
+	 * 
+	 * @param count
+	 *            The size of the cluster to set.
+	 */
+	public void count(int count) {
+		this.count = count;
+	}
+
+	/**
+	 * Coordinates of the symbols in the cluster getter.
+	 * 
+	 * @return The coordinates of the symbols.
+	 */
+	public List<SimpleEntry<Integer, Integer>> coordinates() {
+		return coordinates;
+	}
+
+	/**
+	 * Coordinates of the symbols in the cluster getter.
+	 * 
+	 * @param coordinates
+	 *            The coordinates of symbols to set.
+	 */
+	public void coordinates(List<SimpleEntry<Integer, Integer>> coordinates) {
+		this.coordinates = coordinates;
 	}
 
 	/**
