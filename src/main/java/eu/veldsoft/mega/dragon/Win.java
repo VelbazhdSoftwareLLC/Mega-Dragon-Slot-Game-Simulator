@@ -93,7 +93,6 @@ final class Win {
 	 */
 	@Override
 	public String toString() {
-		return "Win [bet=" + bet + ", win=" + win + ", cluster=" + cluster
-				+ "]";
+		return "[bet = " + bet + ", win = " + win + ", cluster = " + cluster + "]";
 	}
 }

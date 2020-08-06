@@ -28,12 +28,21 @@ public class Main {
 	/** Array with symbols references as virtual game reels. */
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
 
+	/** Reference to missing symbol object. */
+	private static final Symbol NONE;
+
 	/** Reference to wild symbol object. */
 	private static final Symbol WILD;
 
 	/** Static members initialization. */
 	static {
 		Symbol symbol = null;
+
+		NONE = symbol = new Symbol();
+		symbol.id(0);
+		symbol.name("NONE");
+		symbol.kind(Symbol.Kind.NONE);
+		SYMBOLS.add(symbol);
 
 		symbol = new Symbol();
 		symbol.id(1);
@@ -167,31 +176,31 @@ public class Main {
 		symbol.kind(Symbol.Kind.WILD);
 		SYMBOLS.add(symbol);
 
-		REELS[0] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[0] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[1] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[1] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[2] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[2] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[3] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[3] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[4] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[4] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[5] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[5] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[6] = new Symbol[]{SYMBOLS.get(0), SYMBOLS.get(1), SYMBOLS.get(2),
+		REELS[6] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
 				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
 				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
 				SYMBOLS.get(8), SYMBOLS.get(8)};
@@ -209,7 +218,7 @@ public class Main {
 	private static int stops[] = new int[NUMBER_OF_COLUMNS];
 
 	/** Total bet for a single game run. */
-	private static double totalBet = 0;
+	private static double totalBet = 1;
 
 	/** Total win for a single game run. */
 	private static double totalWin = 0;
@@ -504,8 +513,6 @@ public class Main {
 		/* Collect each cluster separately. */
 		for (Cluster info : clusters) {
 			double win = bet * info.symbol.multiplier(info.count());
-			System.err.println(info.count());
-			System.err.println(win);
 
 			if (win > 0) {
 				/* Track only a positive win. */
@@ -569,27 +576,32 @@ public class Main {
 	 *            Command line arguments.
 	 */
 	public static void main(String[] args) {
-		// System.out.println(SYMBOLS);
-		// System.out.println(Arrays.deepToString(REELS));
-
 		spin(view, REELS, stops);
-		System.out.println(collect(totalBet, view, bitmask,
-				clusters = mark(bitmask, view)));
-		// pack(view);
-		// respin(view, REELS, stops);
+		List<Win> paid = collect(totalBet, view, bitmask,
+				clusters = mark(bitmask, view));
+		pack(view);
+		respin(view, REELS, stops);
 
-		// System.out.println();
-		// System.out.println(Arrays.deepToString(view).replace("[[", "")
-		// .replace("]]", "").replace("],", "\n").replace(" [", "")
-		// .replace(",", "\t"));
-		//
-		// System.out.println();
-		// System.out.println((mark(bitmask, view) + "").replace("[", "")
-		// .replace("]", "").replace(", ", "\n" + "").replace(" ", "\t"));
-		//
-		// System.out.println();
-		// System.out.println(Arrays.deepToString(clusters).replace("[[", "")
-		// .replace("]]", "").replace("],", "\n").replace(" [", "")
-		// .replace(",", "\t"));
+//		System.out.println(SYMBOLS);
+//		System.out.println(Arrays.deepToString(REELS).replace("[[", "").replace("]]", "")
+//				.replace("],", "\n").replace(" [", "").replace(",", "\t"));
+
+//		System.out.println();
+//		System.out.println(Arrays.deepToString(view).replace("[[", "")
+//				.replace("]]", "").replace("],", "\n").replace(" [", "")
+//				.replace(",", "\t"));
+
+//		System.out.println();
+//		System.out.println(clusters.toString().replace("[", "").replace("]", "")
+//				.replace(", ", "\n" + "").replace(" ", "\t"));
+
+//		System.out.println();
+//		System.out.println(Arrays.deepToString(bitmask).replace("[[", "")
+//				.replace("]]", "").replace("],", "\n").replace(" [", "")
+//				.replace(",", "\t"));
+
+//		System.out.println();
+//		System.out.println(paid.toString().replace("[[", "").replace("]]", "")
+//				.replace("],", "\n").replace(" [", "").replace(",", "\t"));
 	}
 }
