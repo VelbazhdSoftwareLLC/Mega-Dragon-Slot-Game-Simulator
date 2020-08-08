@@ -209,11 +209,6 @@ public class Main {
 	/** Visible screen with the symbols. */
 	private static Symbol view[][] = new Symbol[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
 
-	/** Clusters bit mask by id of the symbol. */
-	private static int bitmask[][] = new int[NUMBER_OF_COLUMNS][NUMBER_OF_ROWS];
-
-	private static List<Cluster> clusters = null;
-
 	/** Current stops on the reels. */
 	private static int stops[] = new int[NUMBER_OF_COLUMNS];
 
@@ -281,7 +276,7 @@ public class Main {
 	/**
 	 * Recursive procedure for clusters identification.
 	 * 
-	 * @param clusters
+	 * @param bitmask
 	 *            Output matrix with markings.
 	 * @param view
 	 *            Game screen with symbols.
@@ -297,9 +292,9 @@ public class Main {
 	 * 
 	 * @return Count of symbols part of the cluster.
 	 */
-	private static int mark(int[][] clusters, Symbol[][] view, int x, int y,
+	private static int mark(int[][] bitmask, Symbol[][] view, int x, int y,
 			Symbol symbol, List<SimpleEntry<Integer, Integer>> coordinates) {
-		if (clusters == null) {
+		if (bitmask == null) {
 			return 0;
 		}
 
@@ -314,13 +309,13 @@ public class Main {
 		if (y < 0) {
 			return 0;
 		}
-		if (x >= clusters.length) {
+		if (x >= bitmask.length) {
 			return 0;
 		}
 		if (x >= view.length) {
 			return 0;
 		}
-		if (y >= clusters[x].length) {
+		if (y >= bitmask[x].length) {
 			return 0;
 		}
 		if (y >= view[x].length) {
@@ -342,23 +337,19 @@ public class Main {
 		}
 
 		/* If the cell is already part of another cluster do not handle it. */
-		if (clusters[x][y] != 0) {
+		if (bitmask[x][y] != -1) {
 			return 0;
 		}
 
 		/* Mark as part of a cluster and investigate neighbors. */
-		clusters[x][y] = symbol.id();
-
-		/* Keep track of cell's coordinates. */
-		if (view[x][y].kind() != Symbol.Kind.WILD) {
-			coordinates.add(new SimpleEntry<Integer, Integer>(x, y));
-		}
+		bitmask[x][y] = symbol.id();
+		coordinates.add(new SimpleEntry<Integer, Integer>(x, y));
 
 		/* Calculate neighbors. */
-		return 1 + mark(clusters, view, x + 1, y, symbol, coordinates)
-				+ mark(clusters, view, x - 1, y, symbol, coordinates)
-				+ mark(clusters, view, x, y + 1, symbol, coordinates)
-				+ mark(clusters, view, x, y - 1, symbol, coordinates);
+		return 1 + mark(bitmask, view, x + 1, y, symbol, coordinates)
+				+ mark(bitmask, view, x - 1, y, symbol, coordinates)
+				+ mark(bitmask, view, x, y + 1, symbol, coordinates)
+				+ mark(bitmask, view, x, y - 1, symbol, coordinates);
 	}
 
 	/**
@@ -405,66 +396,67 @@ public class Main {
 	 * Mark clusters with different numbers. If there is no cluster in cell zero
 	 * is written.
 	 * 
-	 * @param clusters
-	 *            Output matrix with markings.
 	 * @param view
 	 *            Game screen with symbols.
 	 * 
 	 * @return Clusters information as symbol and count of occurrences.
 	 */
-	private static List<Cluster> mark(int clusters[][], Symbol[][] view) {
-		/* Clear cluster flags. */
-		for (int i = 0; i < clusters.length; i++) {
-			for (int j = 0; j < clusters[i].length; j++) {
-				clusters[i][j] = 0;
+	private static List<Cluster> mark(Symbol[][] view) {
+		/* List of clusters informatio. */
+		List<Cluster> result = new ArrayList<Cluster>();
+
+		/* Clusters bit mask by id of the symbol. */
+		int bitmask[][] = new int[view.length][];
+		for (int i = 0; i < bitmask.length; i++) {
+			bitmask[i] = new int[view[i].length];
+			for (int j = 0; j < bitmask[i].length; j++) {
+				bitmask[i][j] = -1;
 			}
 		}
-
-		List<Cluster> result = new ArrayList<Cluster>();
 
 		for (int i = 0; i < view.length; i++) {
 			for (int j = 0; j < view[i].length; j++) {
 				/*
-				 * It is possible view to has null pointers. If the cell is
-				 * marked as already part of a cluster it is not investigated
-				 * anymore.
+				 * It is possible view to has null pointers.
 				 */
-				if (view[i][j] == null || clusters[i][j] != 0) {
+				if (view[i][j] == null) {
 					continue;
 				}
 
-				/*
-				 * The wild symbol is not allowed to be part of its own cluster.
-				 */
-				if (view[i][j].kind() == Symbol.Kind.WILD) {
-					continue;
+				/* Clear cluster flags for wilds because they need to participate in other clusters. */
+				for (int k = 0; k < bitmask.length; k++) {
+					for (int l = 0; l < bitmask[k].length; l++) {
+						if(view[k][l].kind() == Symbol.Kind.WILD) {
+							bitmask[k][l] = -1;
+						}
+					}
 				}
 
 				/* Mark as part of a cluster and investigate neighbors. */
-				clusters[i][j] = view[i][j].id();
+				bitmask[i][j] = view[i][j].id();
 				List<AbstractMap.SimpleEntry<Integer, Integer>> coordinates = new ArrayList<SimpleEntry<Integer, Integer>>();
 				coordinates.add(new SimpleEntry<Integer, Integer>(i, j));
 
 				/* Calculate the size of the cluster. */
 				int count = 1
-						+ mark(clusters, view, i + 1, j, view[i][j],
+						+ mark(bitmask, view, i + 1, j, view[i][j],
 								coordinates)
-						+ mark(clusters, view, i - 1, j, view[i][j],
+						+ mark(bitmask, view, i - 1, j, view[i][j],
 								coordinates)
-						+ mark(clusters, view, i, j + 1, view[i][j],
+						+ mark(bitmask, view, i, j + 1, view[i][j],
 								coordinates)
-						+ mark(clusters, view, i, j - 1, view[i][j],
+						+ mark(bitmask, view, i, j - 1, view[i][j],
 								coordinates);
 
 				/* Calculate the center of the cluster. */
 				int center[] = {i, j};
 				if (count > 1) {
 					center = center(coordinates);
-				}
 
-				/* Keep track of the information for the found cluster. */
-				result.add(new Cluster(view[i][j], center[0], center[1], count,
-						coordinates));
+					/* Keep track of the information for the found cluster. */
+					result.add(new Cluster(view[i][j], center[0], center[1], count,
+							coordinates));
+				}
 			}
 		}
 
@@ -501,32 +493,30 @@ public class Main {
 	 *            for each cluster.
 	 * @param view
 	 *            Game screen with symbols.
-	 * @param bitmask
-	 *            The topology of the clusters.
 	 * @param clusters
 	 *            List of clusters information.
 	 */
 	private static List<Win> collect(double bet, Symbol[][] view,
-			int[][] bitmask, List<Cluster> clusters) {
+			List<Cluster> clusters) {
 		List<Win> result = new ArrayList<Win>();
 
 		/* Collect each cluster separately. */
-		for (Cluster info : clusters) {
-			double win = bet * info.symbol.multiplier(info.count());
+		for (Cluster cluster : clusters) {
+			double win = bet * cluster.symbol.multiplier(cluster.count());
 
 			if (win > 0) {
 				/* Track only a positive win. */
-				result.add(new Win(bet, win, info));
+				result.add(new Win(bet, win, cluster));
 
 				/* Remove cluster but keep wilds. */
-				remove(info, view);
+				remove(cluster, view);
 
 				/*
 				 * High paying symbols generate wild in the center of the
 				 * winning cluster.
 				 */
-				if (info.symbol().kind() == Symbol.Kind.HIGH) {
-					view[info.x()][info.y()] = WILD;
+				if (cluster.symbol().kind() == Symbol.Kind.HIGH) {
+					view[cluster.x()][cluster.y()] = WILD;
 				}
 			}
 		}
@@ -577,23 +567,28 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		spin(view, REELS, stops);
-		List<Win> paid = collect(totalBet, view, bitmask,
-				clusters = mark(bitmask, view));
-		pack(view);
-		respin(view, REELS, stops);
+view[0][0] = WILD;
+view[0][1] = WILD;
+view[1][0] = WILD;
+view[1][1] = WILD;
+		List<Cluster> clusters = mark(view);
+//		List<Win> paid = collect(totalBet, view,
+//				clusters);
+//		pack(view);
+//		respin(view, REELS, stops);
 
 //		System.out.println(SYMBOLS);
 //		System.out.println(Arrays.deepToString(REELS).replace("[[", "").replace("]]", "")
 //				.replace("],", "\n").replace(" [", "").replace(",", "\t"));
 
-//		System.out.println();
-//		System.out.println(Arrays.deepToString(view).replace("[[", "")
-//				.replace("]]", "").replace("],", "\n").replace(" [", "")
-//				.replace(",", "\t"));
+		System.out.println();
+		System.out.println(Arrays.deepToString(view).replace("[[", "")
+				.replace("]]", "").replace("],", "\n").replace(" [", "")
+				.replace(",", "\t"));
 
-//		System.out.println();
-//		System.out.println(clusters.toString().replace("[", "").replace("]", "")
-//				.replace(", ", "\n" + "").replace(" ", "\t"));
+		System.out.println();
+		System.out.println(clusters.toString().replace("[", "").replace("]", "")
+				.replace(", ", "\n" + "").replace(" ", "\t"));
 
 //		System.out.println();
 //		System.out.println(Arrays.deepToString(bitmask).replace("[[", "")
