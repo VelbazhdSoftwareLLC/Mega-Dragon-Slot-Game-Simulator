@@ -1,7 +1,9 @@
 package eu.veldsoft.mega.dragon;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.AbstractMap.SimpleEntry;
 
 /**
  * Description of each cluster.
@@ -9,8 +11,11 @@ import java.util.List;
  * @author Todor Balabanov
  */
 final class Cluster {
+	/** Pseudo-random number generator instance. */
+	private static final Random PRNG = new Random();
+
 	/** Cluster symbol. */
-	Symbol symbol;
+	private Symbol symbol;
 
 	/** Start of the cluster x coordinate. */
 	private int x;
@@ -48,6 +53,8 @@ final class Cluster {
 		this.y = y;
 		this.count = count;
 		coordinates( coordinates );
+
+		centering();
 	}
 
 	/**
@@ -166,6 +173,89 @@ final class Cluster {
 				done = false;
 			}
 		}
+	}
+
+	/**
+	 * Calculate center of the cluster.
+	 * 
+	 * @return Array with two numbers for x and y coordinates.
+	 */
+	public void centering() {
+		int min = Integer.MAX_VALUE;
+		for (SimpleEntry<Integer, Integer> a : coordinates) {
+			int distance = 0;
+			for (SimpleEntry<Integer, Integer> b : coordinates) {
+				/* The distance between the cell itself is zero. */
+				if (a == b) {
+					continue;
+				}
+
+				/* Euclidean distance but without a square root. */
+				distance += (a.getKey() - b.getKey())
+						* (a.getKey() - b.getKey())
+						+ (a.getValue() - b.getValue())
+								* (a.getValue() - b.getValue());
+			}
+
+			/* If a shorter distance is found keep cell coordinates. */
+			if (distance < min && symbol.kind() != Symbol.Kind.WILD) {
+				x = a.getKey();
+				y = a.getValue();
+
+				min = distance;
+			}
+		}
+	}
+
+	/**
+	 * Select coordinates for the wilds but in such way that wilds to be as far from each other as possible. 
+	 *
+	 * @param number How many wilds to be positioned.
+	 *
+	 * @return List of wilds coordinates.
+	 */
+	public List<SimpleEntry<Integer, Integer>> wilds(int number) {
+		List<SimpleEntry<Integer, Integer>> result = null;
+
+		/* If certain times there is no improvement keep the found configuration. */
+		for(int attempt=0, max=0; attempt<10;) {
+			List<SimpleEntry<Integer, Integer>> wilds = new ArrayList<SimpleEntry<Integer, Integer>>();
+
+			/* Generate a random candidate configuration. */
+			for(int i=0; i<number && i<coordinates.size(); i++) {
+				SimpleEntry<Integer, Integer> value = null;
+				do { value = coordinates.get(PRNG.nextInt(coordinates.size())); } while( wilds.contains(value) );
+				wilds.add( value );
+			}
+
+			/* Calculate total distance between the cells. */
+			int distance = 0;
+			for (SimpleEntry<Integer, Integer> a : coordinates) {
+				for (SimpleEntry<Integer, Integer> b : coordinates) {
+					/* The distance between the cell itself is zero. */
+					if (a == b) {
+						continue;
+					}
+
+					/* Euclidean distance but without a square root. */
+					distance += (a.getKey() - b.getKey())
+							* (a.getKey() - b.getKey())
+							+ (a.getValue() - b.getValue())
+									* (a.getValue() - b.getValue());
+				}
+			}
+
+			/* If bigger distance is found just keep it as a possible final solution. */
+			if(max < distance) {
+				max = distance;
+				result = wilds;
+				attempt = 0;
+			} else {
+				attempt++;
+			}
+		}
+
+		return result;
 	}
 
 	/**

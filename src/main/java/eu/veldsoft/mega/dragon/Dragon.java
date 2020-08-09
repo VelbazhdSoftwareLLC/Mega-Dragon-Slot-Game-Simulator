@@ -31,7 +31,23 @@ public enum Dragon {
 	}
 
 	public static int amount(int size) {
-		return 0;
+		int result = 0;
+
+		for(Map.Entry<Integer, Integer> entry : CLUSTER_SIZE_TO_AMOUNT.entrySet()) {
+			/* If the cluster is smaller than the table size value skip it. */
+			if(size < entry.getKey()) {
+				continue;
+			}
+
+			/* If the amount is already bigger than the table value skip it. */
+			if(result > entry.getValue()) {
+				continue;
+			}
+
+			result = entry.getValue();
+		}
+
+		return result;
 	}
 
 	private Dragon(double probability) {

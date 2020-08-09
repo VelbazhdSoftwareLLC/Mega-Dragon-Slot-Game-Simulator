@@ -353,46 +353,6 @@ public class Main {
 	}
 
 	/**
-	 * Calculate center of the cluster.
-	 * 
-	 * @param coordinates
-	 *            List of cluster cells coordinates.
-	 * 
-	 * @return Array with two numbers for x and y coordinates.
-	 */
-	private static int[] center(
-			List<SimpleEntry<Integer, Integer>> coordinates) {
-		int center[] = {-1, -1};
-
-		int min = Integer.MAX_VALUE;
-		for (SimpleEntry<Integer, Integer> a : coordinates) {
-			int distance = 0;
-			for (SimpleEntry<Integer, Integer> b : coordinates) {
-				/* The distance between the cell itself is zero. */
-				if (a == b) {
-					continue;
-				}
-
-				/* Euclidean distance but without a square root. */
-				distance += (a.getKey() - b.getKey())
-						* (a.getKey() - b.getKey())
-						+ (a.getValue() - b.getValue())
-								* (a.getValue() - b.getValue());
-			}
-
-			/* If a shorter distance is found keep cell coordinates. */
-			if (distance < min) {
-				center[0] = a.getKey();
-				center[1] = a.getValue();
-
-				min = distance;
-			}
-		}
-
-		return center;
-	}
-
-	/**
 	 * Mark clusters with different numbers. If there is no cluster in cell zero
 	 * is written.
 	 * 
@@ -448,13 +408,9 @@ public class Main {
 						+ mark(bitmask, view, i, j - 1, view[i][j],
 								coordinates);
 
-				/* Calculate the center of the cluster. */
-				int center[] = {i, j};
 				if (count > 1) {
-					center = center(coordinates);
-
 					/* Keep track of the information for the found cluster. */
-					Cluster cluster = new Cluster(view[i][j], center[0], center[1], count,
+					Cluster cluster = new Cluster(view[i][j], i, j, count,
 							coordinates);
 					if(result.contains(cluster) == false) {
 						result.add(cluster);
@@ -510,7 +466,7 @@ public class Main {
 
 		/* Collect each cluster separately. */
 		for (Cluster cluster : clusters) {
-			double win = bet * cluster.symbol.multiplier(cluster.count());
+			double win = bet * cluster.symbol().multiplier(cluster.count());
 
 			if (win > 0) {
 				/* Track only a positive win. */
