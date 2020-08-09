@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Description of each cluster.
@@ -13,6 +15,12 @@ import java.util.AbstractMap.SimpleEntry;
 final class Cluster {
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
+
+	/** Refinement threshold is the number of times when there is no improvement of wilds displacements as criteria for refinement stop. */
+	private static final int REFINEMENT_THRESHOLD = 10;
+
+	/** How many wilds to place according to cluster size. */
+	private static final Map<Integer, Integer> CLUSTER_SIZE_TO_WILDS_AMOUNT = new HashMap<Integer, Integer>();
 
 	/** Cluster symbol. */
 	private Symbol symbol;
@@ -28,6 +36,21 @@ final class Cluster {
 
 	/** Coordinates of the symbols in the cluster, but wilds are excluded. */
 	private List<SimpleEntry<Integer, Integer>> coordinates;
+
+	/** Initialization of the static members. */
+	static {
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put( 5, 1);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(10, 2);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(15, 3);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(20, 4);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(25, 5);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(30, 6);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(35, 7);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(40, 8);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(45, 9);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(50, 10);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(55, 11);
+	}
 
 	/**
 	 * Constructor with all parameters.
@@ -208,17 +231,42 @@ final class Cluster {
 	}
 
 	/**
-	 * Select coordinates for the wilds but in such way that wilds to be as far from each other as possible. 
+	 * Estimation of wilds number according to cluster size. 
 	 *
-	 * @param number How many wilds to be positioned.
+	 * @return Number of wilds according predefined table.
+	 */
+	public int numberOfWilds() {
+		int result = 0;
+
+		for(Map.Entry<Integer, Integer> entry : CLUSTER_SIZE_TO_WILDS_AMOUNT.entrySet()) {
+			/* If the cluster is smaller than the table size value skip it. */
+			if(count < entry.getKey()) {
+				continue;
+			}
+
+			/* If the amount is already bigger than the table value skip it. */
+			if(result > entry.getValue()) {
+				continue;
+			}
+
+			result = entry.getValue();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Select coordinates for the wilds but in such way that wilds to be as far from each other as possible. 
 	 *
 	 * @return List of wilds coordinates.
 	 */
-	public List<SimpleEntry<Integer, Integer>> wilds(int number) {
+	public List<SimpleEntry<Integer, Integer>> wilds() {
 		List<SimpleEntry<Integer, Integer>> result = null;
 
+		int number = numberOfWilds();
+
 		/* If certain times there is no improvement keep the found configuration. */
-		for(int attempt=0, max=0; attempt<10;) {
+		for(int attempt=0, max=0; attempt<REFINEMENT_THRESHOLD;) {
 			List<SimpleEntry<Integer, Integer>> wilds = new ArrayList<SimpleEntry<Integer, Integer>>();
 
 			/* Generate a random candidate configuration. */

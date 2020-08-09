@@ -476,11 +476,13 @@ public class Main {
 				remove(cluster, view);
 
 				/*
-				 * High paying symbols generate wild in the center of the
+				 * High paying symbols generate wild(s) in the space of the
 				 * winning cluster.
 				 */
 				if (cluster.symbol().kind() == Symbol.Kind.HIGH) {
-					view[cluster.x()][cluster.y()] = WILD;
+					for(SimpleEntry<Integer, Integer> coordinate : cluster.wilds()) {
+						view[coordinate.getKey()][coordinate.getValue()] = WILD;
+					}
 				}
 			}
 		}
@@ -531,10 +533,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		spin(view, REELS, stops);
-//view[0][0] = WILD;
-//view[0][1] = WILD;
-//view[1][0] = WILD;
-//view[1][1] = WILD;
+//{for(int c=0,n=0;c<view.length;c++)for(int r=0;r<view[c].length;r++,n++){if(n<56){view[c][r]=SYMBOLS.get(7);}else{view[c][r]=SYMBOLS.get((int)(1+Math.random()*4));}}}
+System.out.println();System.out.println(Arrays.deepToString(view).replace("[[", "").replace("]]", "").replace("],", "\n").replace(" [", "").replace(",", "\t"));
 		List<Cluster> clusters = mark(view);
 		List<Win> paid = collect(totalBet, view,
 				clusters);
