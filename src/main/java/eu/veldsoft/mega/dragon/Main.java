@@ -454,8 +454,11 @@ public class Main {
 					center = center(coordinates);
 
 					/* Keep track of the information for the found cluster. */
-					result.add(new Cluster(view[i][j], center[0], center[1], count,
-							coordinates));
+					Cluster cluster = new Cluster(view[i][j], center[0], center[1], count,
+							coordinates);
+					if(result.contains(cluster) == false) {
+						result.add(cluster);
+					}
 				}
 			}
 		}
@@ -473,6 +476,11 @@ public class Main {
 	 */
 	private static void remove(Cluster cluster, Symbol[][] view) {
 		for (SimpleEntry<Integer, Integer> cell : cluster.coordinates()) {
+			/* Do not handle empty cells. */
+			if(view[cell.getKey()][cell.getValue()] == null) {
+				continue;
+			}
+
 			/* Wilds are not removed. */
 			if (view[cell.getKey()][cell.getValue()]
 					.kind() == Symbol.Kind.WILD) {
@@ -567,15 +575,15 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		spin(view, REELS, stops);
-view[0][0] = WILD;
-view[0][1] = WILD;
-view[1][0] = WILD;
-view[1][1] = WILD;
+//view[0][0] = WILD;
+//view[0][1] = WILD;
+//view[1][0] = WILD;
+//view[1][1] = WILD;
 		List<Cluster> clusters = mark(view);
-//		List<Win> paid = collect(totalBet, view,
-//				clusters);
-//		pack(view);
-//		respin(view, REELS, stops);
+		List<Win> paid = collect(totalBet, view,
+				clusters);
+		pack(view);
+		respin(view, REELS, stops);
 
 //		System.out.println(SYMBOLS);
 //		System.out.println(Arrays.deepToString(REELS).replace("[[", "").replace("]]", "")

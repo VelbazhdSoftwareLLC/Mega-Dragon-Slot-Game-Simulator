@@ -47,7 +47,7 @@ final class Cluster {
 		this.x = x;
 		this.y = y;
 		this.count = count;
-		this.coordinates = coordinates;
+		coordinates( coordinates );
 	}
 
 	/**
@@ -143,6 +143,29 @@ final class Cluster {
 	 */
 	public void coordinates(List<SimpleEntry<Integer, Integer>> coordinates) {
 		this.coordinates = coordinates;
+
+		/* Sorting is very important in order hash code calculation to work. */
+		boolean done = false;
+		while(done == false) {
+			done = true;
+
+			for(int i=0; i<this.coordinates.size()-1; i++) {
+				/* When elements are in proper order do nothing. */
+				if(this.coordinates.get(i).getKey() < this.coordinates.get(i+1).getKey()) {
+					continue;
+				} else if(this.coordinates.get(i).getKey() == this.coordinates.get(i+1).getKey() && this.coordinates.get(i).getValue() < this.coordinates.get(i+1).getValue()) {
+					continue;
+				}
+
+				/* Swap elements to be in better order. */
+				SimpleEntry<Integer, Integer> value = this.coordinates.get(i);
+				this.coordinates.set(i, this.coordinates.get(i+1));
+				this.coordinates.set(i+1, value);
+
+				/* Loop once again. */
+				done = false;
+			}
+		}
 	}
 
 	/**
@@ -151,5 +174,40 @@ final class Cluster {
 	@Override
 	public String toString() {
 		return "" + symbol + " " + count + " " + x + " " + y + "";
+	}
+	
+	/** 
+	 * The simplest possible hash code of the object.
+	 * 
+	 * @return The hash code.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((coordinates == null) ? 0 : coordinates.hashCode());
+		return result;
+	}
+
+	/**
+	 * Compares two objects.
+	 * 
+	 * @return True if they are equal and false otherwise.	
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cluster other = (Cluster) obj;
+		if (coordinates == null) {
+			if (other.coordinates != null)
+				return false;
+		} else if (!coordinates.equals(other.coordinates))
+			return false;
+		return true;
 	}
 }
