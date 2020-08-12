@@ -383,10 +383,13 @@ public class Main {
 					continue;
 				}
 
-				/* Clear cluster flags for wilds because they need to participate in other clusters. */
+				/*
+				 * Clear cluster flags for wilds because they need to
+				 * participate in other clusters.
+				 */
 				for (int k = 0; k < bitmask.length; k++) {
 					for (int l = 0; l < bitmask[k].length; l++) {
-						if(view[k][l].kind() == Symbol.Kind.WILD) {
+						if (view[k][l].kind() == Symbol.Kind.WILD) {
 							bitmask[k][l] = -1;
 						}
 					}
@@ -399,12 +402,9 @@ public class Main {
 
 				/* Calculate the size of the cluster. */
 				int count = 1
-						+ mark(bitmask, view, i + 1, j, view[i][j],
-								coordinates)
-						+ mark(bitmask, view, i - 1, j, view[i][j],
-								coordinates)
-						+ mark(bitmask, view, i, j + 1, view[i][j],
-								coordinates)
+						+ mark(bitmask, view, i + 1, j, view[i][j], coordinates)
+						+ mark(bitmask, view, i - 1, j, view[i][j], coordinates)
+						+ mark(bitmask, view, i, j + 1, view[i][j], coordinates)
 						+ mark(bitmask, view, i, j - 1, view[i][j],
 								coordinates);
 
@@ -412,7 +412,7 @@ public class Main {
 					/* Keep track of the information for the found cluster. */
 					Cluster cluster = new Cluster(view[i][j], i, j, count,
 							coordinates);
-					if(result.contains(cluster) == false) {
+					if (result.contains(cluster) == false) {
 						result.add(cluster);
 					}
 				}
@@ -433,7 +433,7 @@ public class Main {
 	private static void remove(Cluster cluster, Symbol[][] view) {
 		for (SimpleEntry<Integer, Integer> cell : cluster.coordinates()) {
 			/* Do not handle empty cells. */
-			if(view[cell.getKey()][cell.getValue()] == null) {
+			if (view[cell.getKey()][cell.getValue()] == null) {
 				continue;
 			}
 
@@ -480,7 +480,8 @@ public class Main {
 				 * winning cluster.
 				 */
 				if (cluster.symbol().kind() == Symbol.Kind.HIGH) {
-					for(SimpleEntry<Integer, Integer> coordinate : cluster.wilds()) {
+					for (SimpleEntry<Integer, Integer> coordinate : cluster
+							.wilds()) {
 						view[coordinate.getKey()][coordinate.getValue()] = WILD;
 					}
 				}
@@ -526,6 +527,22 @@ public class Main {
 	}
 
 	/**
+	 * Manipulate the game screen according to dragons rules.
+	 * 
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param clusters
+	 *            List of clusters information.
+	 * 
+	 * @return True if dragons ran, false otherwise.
+	 */
+	private static boolean dragons(Symbol[][] view, List<Cluster> clusters) {
+		// TODO Do dragon runs.
+
+		return false;
+	}
+
+	/**
 	 * Application single entry point method.
 	 * 
 	 * @param args
@@ -533,34 +550,46 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		spin(view, REELS, stops);
-//{for(int c=0,n=0;c<view.length;c++)for(int r=0;r<view[c].length;r++,n++){if(n<56){view[c][r]=SYMBOLS.get(7);}else{view[c][r]=SYMBOLS.get((int)(1+Math.random()*4));}}}
-System.out.println();System.out.println(Arrays.deepToString(view).replace("[[", "").replace("]]", "").replace("],", "\n").replace(" [", "").replace(",", "\t"));
-		List<Cluster> clusters = mark(view);
-		List<Win> paid = collect(totalBet, view,
-				clusters);
-		pack(view);
-		respin(view, REELS, stops);
 
-//		System.out.println(SYMBOLS);
-//		System.out.println(Arrays.deepToString(REELS).replace("[[", "").replace("]]", "")
-//				.replace("],", "\n").replace(" [", "").replace(",", "\t"));
+		boolean bonus = false;
+		do {
+			/* Run a regular game. */
+			List<Win> paid = null;
+			List<Cluster> clusters = null;
+			do {
+				clusters = mark(view);
+				paid = collect(totalBet, view, clusters);
+				pack(view);
+				respin(view, REELS, stops);
+			} while (paid.size() > 0);
 
-		System.out.println();
-		System.out.println(Arrays.deepToString(view).replace("[[", "")
-				.replace("]]", "").replace("],", "\n").replace(" [", "")
-				.replace(",", "\t"));
+			/* Run the bonus feature by checking for dragons. */
+			bonus = dragons(view, clusters);
+		} while (bonus == true);
 
-		System.out.println();
-		System.out.println(clusters.toString().replace("[", "").replace("]", "")
-				.replace(", ", "\n" + "").replace(" ", "\t"));
+		// System.out.println(SYMBOLS);
+		// System.out.println(Arrays.deepToString(REELS).replace("[[",
+		// "").replace("]]", "")
+		// .replace("],", "\n").replace(" [", "").replace(",", "\t"));
 
-//		System.out.println();
-//		System.out.println(Arrays.deepToString(bitmask).replace("[[", "")
-//				.replace("]]", "").replace("],", "\n").replace(" [", "")
-//				.replace(",", "\t"));
+		// System.out.println();
+		// System.out.println(Arrays.deepToString(view).replace("[[", "")
+		// .replace("]]", "").replace("],", "\n").replace(" [", "")
+		// .replace(",", "\t"));
 
-//		System.out.println();
-//		System.out.println(paid.toString().replace("[[", "").replace("]]", "")
-//				.replace("],", "\n").replace(" [", "").replace(",", "\t"));
+		// System.out.println();
+		// System.out.println(clusters.toString().replace("[", "").replace("]",
+		// "")
+		// .replace(", ", "\n" + "").replace(" ", "\t"));
+
+		// System.out.println();
+		// System.out.println(Arrays.deepToString(bitmask).replace("[[", "")
+		// .replace("]]", "").replace("],", "\n").replace(" [", "")
+		// .replace(",", "\t"));
+
+		// System.out.println();
+		// System.out.println(paid.toString().replace("[[", "").replace("]]",
+		// "")
+		// .replace("],", "\n").replace(" [", "").replace(",", "\t"));
 	}
 }
