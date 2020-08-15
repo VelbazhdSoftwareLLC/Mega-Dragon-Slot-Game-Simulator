@@ -176,34 +176,27 @@ public class Main {
 		symbol.kind(Symbol.Kind.WILD);
 		SYMBOLS.add(symbol);
 
-		REELS[0] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[1] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[2] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[3] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[4] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[5] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
-		REELS[6] = new Symbol[]{SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2),
-				SYMBOLS.get(3), SYMBOLS.get(4), SYMBOLS.get(5), SYMBOLS.get(6),
-				SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8)};
+		REELS[0] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[1] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[2] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[3] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[4] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[5] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
+		REELS[6] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
+				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
+				SYMBOLS.get(8), SYMBOLS.get(8) };
 	}
 
 	/** Visible screen with the symbols. */
@@ -221,12 +214,9 @@ public class Main {
 	/**
 	 * Single reels spin to fill the view with symbols.
 	 *
-	 * @param view
-	 *            Screen with symbols reference.
-	 * @param reels
-	 *            Reels strips reference.
-	 * @param stops
-	 *            Indices of the reels stops.
+	 * @param view  Screen with symbols reference.
+	 * @param reels Reels strips reference.
+	 * @param stops Indices of the reels stops.
 	 */
 	private static void spin(Symbol[][] view, Symbol[][] reels, int stops[]) {
 		/* Loop over each reel. */
@@ -240,15 +230,13 @@ public class Main {
 			}
 		}
 	}
+
 	/**
 	 * Single reels additional fill the view with symbols.
 	 *
-	 * @param view
-	 *            Screen with symbols reference.
-	 * @param reels
-	 *            Reels strips reference.
-	 * @param stops
-	 *            Indices of the reels stops.
+	 * @param view  Screen with symbols reference.
+	 * @param reels Reels strips reference.
+	 * @param stops Indices of the reels stops.
 	 */
 	private static void respin(Symbol[][] view, Symbol[][] reels, int stops[]) {
 		/* Loop over each reel. */
@@ -276,24 +264,18 @@ public class Main {
 	/**
 	 * Recursive procedure for clusters identification.
 	 * 
-	 * @param bitmask
-	 *            Output matrix with markings.
-	 * @param view
-	 *            Game screen with symbols.
-	 * @param x
-	 *            Coordinates of the central cell.
-	 * @param y
-	 *            Coordinates of the central cell.
-	 * @param symbol
-	 *            The symbol of the cluster.
-	 * @param coordinates
-	 *            List of coordinates for the cells which are part of the
-	 *            cluster.
+	 * @param bitmask     Output matrix with markings.
+	 * @param view        Game screen with symbols.
+	 * @param x           Coordinates of the central cell.
+	 * @param y           Coordinates of the central cell.
+	 * @param symbol      The symbol of the cluster.
+	 * @param coordinates List of coordinates for the cells which are part of the
+	 *                    cluster.
 	 * 
 	 * @return Count of symbols part of the cluster.
 	 */
-	private static int mark(int[][] bitmask, Symbol[][] view, int x, int y,
-			Symbol symbol, List<SimpleEntry<Integer, Integer>> coordinates) {
+	private static int mark(int[][] bitmask, Symbol[][] view, int x, int y, Symbol symbol,
+			List<SimpleEntry<Integer, Integer>> coordinates) {
 		if (bitmask == null) {
 			return 0;
 		}
@@ -328,11 +310,9 @@ public class Main {
 		}
 
 		/*
-		 * If the symbol is not same as the cluster's one or wild do not handle
-		 * it.
+		 * If the symbol is not same as the cluster's one or wild do not handle it.
 		 */
-		if (view[x][y].id() != symbol.id()
-				&& view[x][y].kind() != Symbol.Kind.WILD) {
+		if (view[x][y].id() != symbol.id() && view[x][y].kind() != Symbol.Kind.WILD) {
 			return 0;
 		}
 
@@ -353,11 +333,10 @@ public class Main {
 	}
 
 	/**
-	 * Mark clusters with different numbers. If there is no cluster in cell zero
-	 * is written.
+	 * Mark clusters with different numbers. If there is no cluster in cell zero is
+	 * written.
 	 * 
-	 * @param view
-	 *            Game screen with symbols.
+	 * @param view Game screen with symbols.
 	 * 
 	 * @return Clusters information as symbol and count of occurrences.
 	 */
@@ -384,8 +363,8 @@ public class Main {
 				}
 
 				/*
-				 * Clear cluster flags for wilds because they need to
-				 * participate in other clusters.
+				 * Clear cluster flags for wilds because they need to participate in other
+				 * clusters.
 				 */
 				for (int k = 0; k < bitmask.length; k++) {
 					for (int l = 0; l < bitmask[k].length; l++) {
@@ -401,17 +380,14 @@ public class Main {
 				coordinates.add(new SimpleEntry<Integer, Integer>(i, j));
 
 				/* Calculate the size of the cluster. */
-				int count = 1
-						+ mark(bitmask, view, i + 1, j, view[i][j], coordinates)
+				int count = 1 + mark(bitmask, view, i + 1, j, view[i][j], coordinates)
 						+ mark(bitmask, view, i - 1, j, view[i][j], coordinates)
 						+ mark(bitmask, view, i, j + 1, view[i][j], coordinates)
-						+ mark(bitmask, view, i, j - 1, view[i][j],
-								coordinates);
+						+ mark(bitmask, view, i, j - 1, view[i][j], coordinates);
 
 				if (count > 1) {
 					/* Keep track of the information for the found cluster. */
-					Cluster cluster = new Cluster(view[i][j], i, j, count,
-							coordinates);
+					Cluster cluster = new Cluster(view[i][j], i, j, count, coordinates);
 					if (result.contains(cluster) == false) {
 						result.add(cluster);
 					}
@@ -425,21 +401,19 @@ public class Main {
 	/**
 	 * Remove a cluster from the screen.
 	 * 
-	 * @param cluster
-	 *            The cluster to be removed.
-	 * @param view
-	 *            Game screen model reference.
+	 * @param cluster The cluster to be removed.
+	 * @param view    Game screen model reference.
+	 * @param wilds   A cluster of wilds flag.
 	 */
-	private static void remove(Cluster cluster, Symbol[][] view) {
+	private static void remove(Cluster cluster, Symbol[][] view, boolean wilds) {
 		for (SimpleEntry<Integer, Integer> cell : cluster.coordinates()) {
 			/* Do not handle empty cells. */
 			if (view[cell.getKey()][cell.getValue()] == null) {
 				continue;
 			}
 
-			/* Wilds are not removed. */
-			if (view[cell.getKey()][cell.getValue()]
-					.kind() == Symbol.Kind.WILD) {
+			/* Wilds are not removed when the flag is low. */
+			if (view[cell.getKey()][cell.getValue()].kind() == Symbol.Kind.WILD && wilds == false) {
 				continue;
 			}
 
@@ -452,16 +426,12 @@ public class Main {
 	/**
 	 * Collect win.
 	 * 
-	 * @param bet
-	 *            Total bet in the game to be multiplied with the coefficient
-	 *            for each cluster.
-	 * @param view
-	 *            Game screen with symbols.
-	 * @param clusters
-	 *            List of clusters information.
+	 * @param bet      Total bet in the game to be multiplied with the coefficient
+	 *                 for each cluster.
+	 * @param view     Game screen with symbols.
+	 * @param clusters List of clusters information.
 	 */
-	private static List<Win> collect(double bet, Symbol[][] view,
-			List<Cluster> clusters) {
+	private static List<Win> collect(double bet, Symbol[][] view, List<Cluster> clusters) {
 		List<Win> result = new ArrayList<Win>();
 
 		/* Collect each cluster separately. */
@@ -473,15 +443,13 @@ public class Main {
 				result.add(new Win(bet, win, cluster));
 
 				/* Remove cluster but keep wilds. */
-				remove(cluster, view);
+				remove(cluster, view, false);
 
 				/*
-				 * High paying symbols generate wild(s) in the space of the
-				 * winning cluster.
+				 * High paying symbols generate wild(s) in the space of the winning cluster.
 				 */
 				if (cluster.symbol().kind() == Symbol.Kind.HIGH) {
-					for (SimpleEntry<Integer, Integer> coordinate : cluster
-							.wilds()) {
+					for (SimpleEntry<Integer, Integer> coordinate : cluster.wilds()) {
 						view[coordinate.getKey()][coordinate.getValue()] = WILD;
 					}
 				}
@@ -494,8 +462,7 @@ public class Main {
 	/**
 	 * Pack screen after clusters removal.
 	 * 
-	 * @param view
-	 *            Game screen with symbols.
+	 * @param view Game screen with symbols.
 	 */
 	private static void pack(Symbol[][] view) {
 		/* Do the packing column by column. */
@@ -529,24 +496,38 @@ public class Main {
 	/**
 	 * Manipulate the game screen according to dragons rules.
 	 * 
-	 * @param view
-	 *            Game screen with symbols.
-	 * @param clusters
-	 *            List of clusters information.
+	 * @param view     Game screen with symbols.
+	 * @param clusters List of clusters information.
 	 * 
 	 * @return True if dragons ran, false otherwise.
 	 */
 	private static boolean dragons(Symbol[][] view, List<Cluster> clusters) {
-		// TODO Do dragon runs.
+		boolean result = false;
 
-		return false;
+		for (Cluster cluster : clusters) {
+			/* If cluster is non wild cluster do nothing. */
+			if (cluster.symbol().kind() != Symbol.Kind.WILD) {
+				continue;
+			}
+
+			/* Execute dragon behavior. */
+			Dragon dragon = Dragon.scramble();
+			dragon.execute(view, SYMBOLS, cluster.count());
+
+			/* Remove the cluster with wilds. */
+			remove(cluster, view, true);
+
+			/* Dragons were available. */
+			result = true;
+		}
+
+		return result;
 	}
 
 	/**
 	 * Application single entry point method.
 	 * 
-	 * @param args
-	 *            Command line arguments.
+	 * @param args Command line arguments.
 	 */
 	public static void main(String[] args) {
 		spin(view, REELS, stops);
@@ -565,6 +546,10 @@ public class Main {
 
 			/* Run the bonus feature by checking for dragons. */
 			bonus = dragons(view, clusters);
+			if (bonus == true) {
+				pack(view);
+				respin(view, REELS, stops);
+			}
 		} while (bonus == true);
 
 		// System.out.println(SYMBOLS);

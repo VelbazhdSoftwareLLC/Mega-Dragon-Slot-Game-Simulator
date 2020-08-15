@@ -24,8 +24,8 @@ final class Symbol {
 	private Symbol.Kind kind = Kind.NONE;
 
 	/**
-	 * Pay table of a single symbol. The information is given a list of values.
-	 * The key is the lower limit of symbol count when the value is the pay out
+	 * Pay table of a single symbol. The information is given a list of values. The
+	 * key is the lower limit of symbol count when the value is the pay out
 	 * coefficient according to original game rules.
 	 */
 	private Map<Integer, Double> pays = new HashMap<Integer, Double>();
@@ -42,8 +42,7 @@ final class Symbol {
 	/**
 	 * Symbol identifier setter.
 	 * 
-	 * @param id
-	 *            The id of the symbol to set.
+	 * @param id The id of the symbol to set.
 	 */
 	public void id(int id) {
 		this.id = id;
@@ -61,8 +60,7 @@ final class Symbol {
 	/**
 	 * Symbol name setter.
 	 * 
-	 * @param name
-	 *            The name of the symbol to set.
+	 * @param name The name of the symbol to set.
 	 */
 	public void name(String name) {
 		this.name = name;
@@ -80,8 +78,7 @@ final class Symbol {
 	/**
 	 * Symbol kind setter.
 	 * 
-	 * @param kind
-	 *            The kind of the symbol to set.
+	 * @param kind The kind of the symbol to set.
 	 */
 	public void kind(Symbol.Kind kind) {
 		this.kind = kind;
@@ -101,8 +98,7 @@ final class Symbol {
 	 * Symbol pay out list reference setter. A deep copy should be considered a
 	 * safer approach for access object members.
 	 * 
-	 * @param pays
-	 *            A reference to pay out list of the symbol to set.
+	 * @param pays A reference to pay out list of the symbol to set.
 	 */
 	public void pays(Map<Integer, Double> pays) {
 		this.pays = pays;
@@ -111,8 +107,7 @@ final class Symbol {
 	/**
 	 * Calculate win multiplier according to the size of the cluster.
 	 * 
-	 * @param count
-	 *            Size of the cluster.
+	 * @param count Size of the cluster.
 	 * 
 	 * @return Calculated win.
 	 */
@@ -126,8 +121,7 @@ final class Symbol {
 			}
 
 			/*
-			 * Gets the bigger possible multiplier for the bigger possible
-			 * cluster size.
+			 * Gets the bigger possible multiplier for the bigger possible cluster size.
 			 */
 			if (multiplier < pays.get(prize)) {
 				multiplier = pays.get(prize);

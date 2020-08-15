@@ -16,7 +16,10 @@ final class Cluster {
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
 
-	/** Refinement threshold is the number of times when there is no improvement of wilds displacements as criteria for refinement stop. */
+	/**
+	 * Refinement threshold is the number of times when there is no improvement of
+	 * wilds displacements as criteria for refinement stop.
+	 */
 	private static final int REFINEMENT_THRESHOLD = 10;
 
 	/** How many wilds to place according to cluster size. */
@@ -39,7 +42,7 @@ final class Cluster {
 
 	/** Initialization of the static members. */
 	static {
-		CLUSTER_SIZE_TO_WILDS_AMOUNT.put( 5, 1);
+		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(5, 1);
 		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(10, 2);
 		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(15, 3);
 		CLUSTER_SIZE_TO_WILDS_AMOUNT.put(20, 4);
@@ -55,27 +58,21 @@ final class Cluster {
 	/**
 	 * Constructor with all parameters.
 	 * 
-	 * @param symbol
-	 *            Cluster symbol.
-	 * @param x
-	 *            Start of the cluster x coordinate.
-	 * @param y
-	 *            Start of the cluster y coordinate.
-	 * @param count
-	 *            Cluster size.
-	 * @param coordinates
-	 *            Coordinates of the symbols in the cluster, but wilds are
-	 *            excluded.
+	 * @param symbol      Cluster symbol.
+	 * @param x           Start of the cluster x coordinate.
+	 * @param y           Start of the cluster y coordinate.
+	 * @param count       Cluster size.
+	 * @param coordinates Coordinates of the symbols in the cluster, but wilds are
+	 *                    excluded.
 	 */
-	public Cluster(Symbol symbol, int x, int y, int count,
-			List<SimpleEntry<Integer, Integer>> coordinates) {
+	public Cluster(Symbol symbol, int x, int y, int count, List<SimpleEntry<Integer, Integer>> coordinates) {
 		super();
 
 		this.symbol = symbol;
 		this.x = x;
 		this.y = y;
 		this.count = count;
-		coordinates( coordinates );
+		coordinates(coordinates);
 
 		centering();
 	}
@@ -92,8 +89,7 @@ final class Cluster {
 	/**
 	 * Cluster symbol setter.
 	 * 
-	 * @param symbol
-	 *            The symbol to set.
+	 * @param symbol The symbol to set.
 	 */
 	public void symbol(Symbol symbol) {
 		this.symbol = symbol;
@@ -111,8 +107,7 @@ final class Cluster {
 	/**
 	 * Cluster start x coordinate setter.
 	 * 
-	 * @param x
-	 *            The x coordinate of the cluster.
+	 * @param x The x coordinate of the cluster.
 	 */
 	public void x(int x) {
 		this.x = x;
@@ -130,8 +125,7 @@ final class Cluster {
 	/**
 	 * Cluster start y coordinate setter.
 	 * 
-	 * @param y
-	 *            The y coordinate of the cluster.
+	 * @param y The y coordinate of the cluster.
 	 */
 	public void y(int y) {
 		this.y = y;
@@ -149,8 +143,7 @@ final class Cluster {
 	/**
 	 * Cluster size setter.
 	 * 
-	 * @param count
-	 *            The size of the cluster to set.
+	 * @param count The size of the cluster to set.
 	 */
 	public void count(int count) {
 		this.count = count;
@@ -168,29 +161,29 @@ final class Cluster {
 	/**
 	 * Coordinates of the symbols in the cluster getter.
 	 * 
-	 * @param coordinates
-	 *            The coordinates of symbols to set.
+	 * @param coordinates The coordinates of symbols to set.
 	 */
 	public void coordinates(List<SimpleEntry<Integer, Integer>> coordinates) {
 		this.coordinates = coordinates;
 
 		/* Sorting is very important in order hash code calculation to work. */
 		boolean done = false;
-		while(done == false) {
+		while (done == false) {
 			done = true;
 
-			for(int i=0; i<this.coordinates.size()-1; i++) {
+			for (int i = 0; i < this.coordinates.size() - 1; i++) {
 				/* When elements are in proper order do nothing. */
-				if(this.coordinates.get(i).getKey() < this.coordinates.get(i+1).getKey()) {
+				if (this.coordinates.get(i).getKey() < this.coordinates.get(i + 1).getKey()) {
 					continue;
-				} else if(this.coordinates.get(i).getKey() == this.coordinates.get(i+1).getKey() && this.coordinates.get(i).getValue() < this.coordinates.get(i+1).getValue()) {
+				} else if (this.coordinates.get(i).getKey() == this.coordinates.get(i + 1).getKey()
+						&& this.coordinates.get(i).getValue() < this.coordinates.get(i + 1).getValue()) {
 					continue;
 				}
 
 				/* Swap elements to be in better order. */
 				SimpleEntry<Integer, Integer> value = this.coordinates.get(i);
-				this.coordinates.set(i, this.coordinates.get(i+1));
-				this.coordinates.set(i+1, value);
+				this.coordinates.set(i, this.coordinates.get(i + 1));
+				this.coordinates.set(i + 1, value);
 
 				/* Loop once again. */
 				done = false;
@@ -214,10 +207,8 @@ final class Cluster {
 				}
 
 				/* Euclidean distance but without a square root. */
-				distance += (a.getKey() - b.getKey())
-						* (a.getKey() - b.getKey())
-						+ (a.getValue() - b.getValue())
-								* (a.getValue() - b.getValue());
+				distance += (a.getKey() - b.getKey()) * (a.getKey() - b.getKey())
+						+ (a.getValue() - b.getValue()) * (a.getValue() - b.getValue());
 			}
 
 			/* If a shorter distance is found keep cell coordinates. */
@@ -231,21 +222,21 @@ final class Cluster {
 	}
 
 	/**
-	 * Estimation of wilds number according to cluster size. 
+	 * Estimation of wilds number according to cluster size.
 	 *
 	 * @return Number of wilds according predefined table.
 	 */
 	public int numberOfWilds() {
 		int result = 0;
 
-		for(Map.Entry<Integer, Integer> entry : CLUSTER_SIZE_TO_WILDS_AMOUNT.entrySet()) {
+		for (Map.Entry<Integer, Integer> entry : CLUSTER_SIZE_TO_WILDS_AMOUNT.entrySet()) {
 			/* If the cluster is smaller than the table size value skip it. */
-			if(count < entry.getKey()) {
+			if (count < entry.getKey()) {
 				continue;
 			}
 
 			/* If the amount is already bigger than the table value skip it. */
-			if(result > entry.getValue()) {
+			if (result > entry.getValue()) {
 				continue;
 			}
 
@@ -256,7 +247,8 @@ final class Cluster {
 	}
 
 	/**
-	 * Select coordinates for the wilds but in such way that wilds to be as far from each other as possible. 
+	 * Select coordinates for the wilds but in such way that wilds to be as far from
+	 * each other as possible.
 	 *
 	 * @return List of wilds coordinates.
 	 */
@@ -266,14 +258,16 @@ final class Cluster {
 		int number = numberOfWilds();
 
 		/* If certain times there is no improvement keep the found configuration. */
-		for(int attempt=0, max=0; attempt<REFINEMENT_THRESHOLD;) {
+		for (int attempt = 0, max = 0; attempt < REFINEMENT_THRESHOLD;) {
 			List<SimpleEntry<Integer, Integer>> wilds = new ArrayList<SimpleEntry<Integer, Integer>>();
 
 			/* Generate a random candidate configuration. */
-			for(int i=0; i<number && i<coordinates.size(); i++) {
+			for (int i = 0; i < number && i < coordinates.size(); i++) {
 				SimpleEntry<Integer, Integer> value = null;
-				do { value = coordinates.get(PRNG.nextInt(coordinates.size())); } while( wilds.contains(value) );
-				wilds.add( value );
+				do {
+					value = coordinates.get(PRNG.nextInt(coordinates.size()));
+				} while (wilds.contains(value));
+				wilds.add(value);
 			}
 
 			/* Calculate total distance between the cells. */
@@ -286,15 +280,13 @@ final class Cluster {
 					}
 
 					/* Euclidean distance but without a square root. */
-					distance += (a.getKey() - b.getKey())
-							* (a.getKey() - b.getKey())
-							+ (a.getValue() - b.getValue())
-									* (a.getValue() - b.getValue());
+					distance += (a.getKey() - b.getKey()) * (a.getKey() - b.getKey())
+							+ (a.getValue() - b.getValue()) * (a.getValue() - b.getValue());
 				}
 			}
 
 			/* If bigger distance is found just keep it as a possible final solution. */
-			if(max < distance) {
+			if (max < distance) {
 				max = distance;
 				result = wilds;
 				attempt = 0;
@@ -313,8 +305,8 @@ final class Cluster {
 	public String toString() {
 		return "" + symbol + " " + count + " " + x + " " + y + "";
 	}
-	
-	/** 
+
+	/**
 	 * The simplest possible hash code of the object.
 	 * 
 	 * @return The hash code.
@@ -330,7 +322,7 @@ final class Cluster {
 	/**
 	 * Compares two objects.
 	 * 
-	 * @return True if they are equal and false otherwise.	
+	 * @return True if they are equal and false otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {

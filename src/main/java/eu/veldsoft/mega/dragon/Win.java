@@ -18,12 +18,9 @@ final class Win {
 	/**
 	 * Constructor with all fields as arguments.
 	 * 
-	 * @param bet
-	 *            Bet in the run when the win was achieved.
-	 * @param win
-	 *            The achieved win.
-	 * @param cluster
-	 *            Information for the cluster used for the winning achievement.
+	 * @param bet     Bet in the run when the win was achieved.
+	 * @param win     The achieved win.
+	 * @param cluster Information for the cluster used for the winning achievement.
 	 */
 	public Win(double bet, double win, Cluster cluster) {
 		this.bet = bet;
@@ -43,8 +40,7 @@ final class Win {
 	/**
 	 * Bet in the run setter.
 	 * 
-	 * @param bet
-	 *            The bet amount to set.
+	 * @param bet The bet amount to set.
 	 */
 	public void bet(double bet) {
 		this.bet = bet;
@@ -62,15 +58,14 @@ final class Win {
 	/**
 	 * The win amount setter.
 	 * 
-	 * @param win
-	 *            The win achieved to set.
+	 * @param win The win achieved to set.
 	 */
 	public void win(double win) {
 		this.win = win;
 	}
 
 	/**
-	 * Reference to the cluster associated to the win getter. 
+	 * Reference to the cluster associated to the win getter.
 	 * 
 	 * @return The cluster reference.
 	 */
@@ -81,13 +76,12 @@ final class Win {
 	/**
 	 * Reference to the cluster associated to the win setter.
 	 * 
-	 * @param cluster
-	 *            The cluster reference to set.
+	 * @param cluster The cluster reference to set.
 	 */
 	public void cluster(Cluster cluster) {
 		this.cluster = cluster;
 	}
-	
+
 	/**
 	 * Represent the object content as a string.
 	 */
