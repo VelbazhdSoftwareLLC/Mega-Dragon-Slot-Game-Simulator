@@ -130,7 +130,7 @@ final class Symbol {
 
 		return multiplier;
 	}
-
+	
 	/**
 	 * Represent the object content as a string.
 	 */

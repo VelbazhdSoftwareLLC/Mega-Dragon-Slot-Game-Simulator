@@ -19,6 +19,12 @@ public class Main {
 	/** List of all possible symbols in the game. */
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
 
+	/** Reference to missing symbol object. */
+	private static final Symbol NONE;
+
+	/** Reference to wild symbol object. */
+	private static final Symbol WILD;
+
 	/** A number of rows on the screen. */
 	private static final int NUMBER_OF_ROWS = 8;
 
@@ -28,11 +34,34 @@ public class Main {
 	/** Array with symbols references as virtual game reels. */
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
 
-	/** Reference to missing symbol object. */
-	private static final Symbol NONE;
-
-	/** Reference to wild symbol object. */
-	private static final Symbol WILD;
+	/** The text representation of the reels. */
+	private static final String REELS_TEXT = "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
+			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
+			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
+			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
+			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
+			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
+			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
+			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
+			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n"
+			+ "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
+			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
+			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
+			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
+			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
+			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
+			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
+			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
+			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n"
+			+ "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
+			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
+			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
+			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
+			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
+			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
+			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
+			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
+			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n" + "";
 
 	/** Static members initialization. */
 	static {
@@ -176,27 +205,31 @@ public class Main {
 		symbol.kind(Symbol.Kind.WILD);
 		SYMBOLS.add(symbol);
 
-		REELS[0] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[1] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[2] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[3] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[4] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[5] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
-		REELS[6] = new Symbol[] { SYMBOLS.get(9), SYMBOLS.get(1), SYMBOLS.get(2), SYMBOLS.get(3), SYMBOLS.get(4),
-				SYMBOLS.get(5), SYMBOLS.get(6), SYMBOLS.get(7), SYMBOLS.get(8), SYMBOLS.get(8), SYMBOLS.get(8),
-				SYMBOLS.get(8), SYMBOLS.get(8) };
+		/* Parse text of the reels. */
+		List<String> values = new ArrayList<String>();
+		for (String row : REELS_TEXT.split("\n")) {
+			values.addAll(Arrays.asList(row.split("	")));
+		}
+		int length = values.size() / NUMBER_OF_COLUMNS;
+
+		/* Fill reels structure. */
+		for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
+			REELS[i] = new Symbol[length];
+
+			for (int j = 0; j < length; j++) {
+				REELS[i][j] = null;
+				for (Symbol value : SYMBOLS) {
+					if (values.get(i + NUMBER_OF_COLUMNS * j).equals(value.name()) == false) {
+						continue;
+					}
+
+					REELS[i][j] = value;
+					break;
+				}
+			}
+		}
+		System.err.println(Arrays.deepToString(REELS));
+
 	}
 
 	/** Visible screen with the symbols. */
