@@ -16,6 +16,9 @@ public class Main {
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
 
+	/** A total number of Monte-Carlo simulation game runs. */
+	private static long TOTAL_RUNS = 10_000_000;
+
 	/** List of all possible symbols in the game. */
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
 
@@ -228,8 +231,6 @@ public class Main {
 				}
 			}
 		}
-		System.err.println(Arrays.deepToString(REELS));
-
 	}
 
 	/** Visible screen with the symbols. */
@@ -237,12 +238,6 @@ public class Main {
 
 	/** Current stops on the reels. */
 	private static int stops[] = new int[NUMBER_OF_COLUMNS];
-
-	/** Total bet for a single game run. */
-	private static double totalBet = 1;
-
-	/** Total win for a single game run. */
-	private static double totalWin = 0;
 
 	/**
 	 * Single reels spin to fill the view with symbols.
@@ -563,27 +558,39 @@ public class Main {
 	 * @param args Command line arguments.
 	 */
 	public static void main(String[] args) {
-		spin(view, REELS, stops);
+		double totalBet = 1;
+		double totalWin = 0;
 
-		boolean bonus = false;
-		do {
-			/* Run a regular game. */
-			List<Win> paid = null;
-			List<Cluster> clusters = null;
+		double lostMoney = 0;
+		double wonMoney = 0;
+		
+		long numberOfRuns = 0;
+
+		for (numberOfRuns = 0; numberOfRuns < TOTAL_RUNS; numberOfRuns++) {
+			/* Run the game in the base game spin. */
+			spin(view, REELS, stops);
+
+			/* Handle the results from the base game spin. */
+			boolean bonus = false;
 			do {
-				clusters = mark(view);
-				paid = collect(totalBet, view, clusters);
-				pack(view);
-				respin(view, REELS, stops);
-			} while (paid.size() > 0);
+				/* Run a regular game. */
+				List<Win> paid = null;
+				List<Cluster> clusters = null;
+				do {
+					clusters = mark(view);
+					paid = collect(totalBet, view, clusters);
+					pack(view);
+					respin(view, REELS, stops);
+				} while (paid.size() > 0);
 
-			/* Run the bonus feature by checking for dragons. */
-			bonus = dragons(view, clusters);
-			if (bonus == true) {
-				pack(view);
-				respin(view, REELS, stops);
-			}
-		} while (bonus == true);
+				/* Run the bonus feature by checking for dragons. */
+				bonus = dragons(view, clusters);
+				if (bonus == true) {
+					pack(view);
+					respin(view, REELS, stops);
+				}
+			} while (bonus == true);
+		}
 
 		// System.out.println(SYMBOLS);
 		// System.out.println(Arrays.deepToString(REELS).replace("[[",
