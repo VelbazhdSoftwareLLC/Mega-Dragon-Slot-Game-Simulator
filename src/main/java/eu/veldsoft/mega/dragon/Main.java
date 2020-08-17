@@ -17,7 +17,7 @@ public class Main {
 	private static final Random PRNG = new Random();
 
 	/** A total number of Monte-Carlo simulation game runs. */
-	private static long TOTAL_RUNS = 10_000_000;
+	private static long TOTAL_RUNS = 10_000/* _000 */;
 
 	/** List of all possible symbols in the game. */
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
@@ -563,12 +563,17 @@ public class Main {
 
 		double lostMoney = 0;
 		double wonMoney = 0;
-		
+
 		long numberOfRuns = 0;
 
+		long time = System.currentTimeMillis();
 		for (numberOfRuns = 0; numberOfRuns < TOTAL_RUNS; numberOfRuns++) {
+			/* Take a bet. */
+			lostMoney += totalBet;
+
 			/* Run the game in the base game spin. */
 			spin(view, REELS, stops);
+			totalWin = 0;
 
 			/* Handle the results from the base game spin. */
 			boolean bonus = false;
@@ -589,8 +594,56 @@ public class Main {
 					pack(view);
 					respin(view, REELS, stops);
 				}
+
+				/* Register wins. */
+				for (Win won : paid) {
+					wonMoney += won.win();
+					totalWin += won.win();
+				}
 			} while (bonus == true);
+
+			/* Report progress. */
+			if (time + 1000 * 10 < System.currentTimeMillis()) {
+				time = System.currentTimeMillis();
+
+				System.out.print("[");
+				System.out.print(String.format("%3d", (100 * numberOfRuns / TOTAL_RUNS)));
+				System.out.print("% ]");
+				System.out.print("\t");
+				System.out.print(wonMoney / lostMoney);
+				System.out.print("\t");
+				System.out.print(wonMoney);
+				System.out.print("\t");
+				System.out.print(lostMoney);
+				System.out.print("\n");
+			}
 		}
+
+		System.out.print("\n");
+
+		System.out.print("Total Number of Games:");
+		System.out.print("\t");
+		System.out.print(numberOfRuns);
+		System.out.print("\n");
+
+		System.out.print("\n");
+
+		System.out.print("Total Won Money:");
+		System.out.print("\t");
+		System.out.print(wonMoney);
+		System.out.print("\n");
+
+		System.out.print("Total Lost Money:");
+		System.out.print("\t");
+		System.out.print(lostMoney);
+		System.out.print("\n");
+
+		System.out.print("\n");
+
+		System.out.print("Return to Player:");
+		System.out.print("\t");
+		System.out.print(wonMoney / lostMoney);
+		System.out.print("\n");
 
 		// System.out.println(SYMBOLS);
 		// System.out.println(Arrays.deepToString(REELS).replace("[[",
