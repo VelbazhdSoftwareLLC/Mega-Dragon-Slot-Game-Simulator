@@ -199,13 +199,13 @@ public enum Dragon {
 	NONE(0.0, new int[][] { {} }, null),
 
 	/** Green dragon properties. */
-	GREEN(0.5, new int[][] { { 1, 2, 3, 4, 5 }, { 3, 5, 7, 9, 11 } }, new GreenBehavior()),
+	GREEN(0.50, new int[][] { { 2, 3, 4 }, { 5, 6, 7 } }, new GreenBehavior()),
 
 	/** Gold dragon properties. */
-	GOLD(0.3, new int[][] { { 1, 2, 3, 4, 5 }, { 3, 5, 7, 9, 11 } }, new GoldBehavior()),
+	GOLD(0.35, new int[][] { { 2, 3, 4, 5, 6, 7 }, { 2, 3, 4, 5, 6, 7 } }, new GoldBehavior()),
 
 	/** Red dragon properties. */
-	RED(0.2, new int[][] { { 1, 2, 3 }, { 2, 3, 4 } }, new RedBehavior());
+	RED(0.15, new int[][] { { 2, 3, 4 }, { 2, 3, 4 } }, new RedBehavior());
 
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
