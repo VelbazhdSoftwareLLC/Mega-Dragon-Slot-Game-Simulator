@@ -1,5 +1,6 @@
 package eu.veldsoft.mega.dragon;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -177,8 +178,8 @@ final class RedBehavior implements Behavior {
 				|| j + dj * strength >= view[i].length);
 
 		/* Expand the symbol. */
-		for (int x = di * strength - 1; x != i; x += di) {
-			for (int y = dj * strength - 1; y != j; y += dj) {
+		for (int x = i + di * strength; x != i; x -= di) {
+			for (int y = j + dj * strength; y != j; y -= dj) {
 				view[x][y] = view[i][j];
 			}
 		}

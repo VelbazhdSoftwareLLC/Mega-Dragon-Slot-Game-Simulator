@@ -17,7 +17,10 @@ public class Main {
 	private static final Random PRNG = new Random();
 
 	/** A total number of Monte-Carlo simulation game runs. */
-	private static long TOTAL_RUNS = 10_000/* _000 */;
+	private static long TOTAL_RUNS = 10_000_000;
+	
+	/** Number of seconds for reporting. */
+	private static long REPORT_PER_SECONDS = 10;
 
 	/** List of all possible symbols in the game. */
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
@@ -38,33 +41,64 @@ public class Main {
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
 
 	/** The text representation of the reels. */
-	private static final String REELS_TEXT = "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
-			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
-			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
-			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
-			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
-			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
-			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
-			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
-			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n"
-			+ "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
-			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
-			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
-			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
-			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
-			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
-			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
-			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
-			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n"
-			+ "LOW01	LOW01	LOW01	LOW01	LOW01	LOW01	LOW01\n"
-			+ "LOW02	LOW02	LOW02	LOW02	LOW02	LOW02	LOW02\n"
-			+ "LOW03	LOW03	LOW03	LOW03	LOW03	LOW03	LOW03\n"
-			+ "LOW04	LOW04	LOW04	LOW04	LOW04	LOW04	LOW04\n"
-			+ "LOW05	LOW05	LOW05	LOW05	LOW05	LOW05	LOW05\n"
-			+ "HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06	HIGH06\n"
-			+ "HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07	HIGH07\n"
-			+ "HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08	HIGH08\n"
-			+ "HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09	HIGH09\n" + "";
+	private static final String REELS_TEXT = "LOW03	LOW04	LOW01	LOW03	LOW02	LOW02	LOW03\n"
+			+ "LOW04	LOW01	LOW02	LOW01	LOW01	LOW05	LOW01\n"
+			+ "LOW03	LOW03	LOW04	HIGH08	LOW03	LOW01	LOW04\n"
+			+ "LOW02	LOW05	LOW03	LOW02	LOW01	LOW02	LOW01\n"
+			+ "LOW03	LOW01	LOW01	HIGH09	HIGH09	HIGH06	LOW02\n"
+			+ "LOW01	LOW04	LOW02	HIGH07	LOW02	LOW03	LOW05\n"
+			+ "LOW05	LOW02	LOW03	LOW01	LOW04	HIGH06	LOW04\n"
+			+ "LOW02	LOW04	LOW02	LOW03	LOW02	LOW03	LOW03\n"
+			+ "HIGH09	LOW02	LOW01	LOW01	LOW01	LOW02	LOW05\n"
+			+ "LOW02	LOW01	LOW03	LOW02	HIGH07	LOW01	LOW04\n"
+			+ "LOW04	LOW04	HIGH09	LOW05	LOW03	HIGH09	LOW03\n"
+			+ "LOW01	LOW02	LOW02	LOW04	HIGH06	LOW01	HIGH06\n"
+			+ "LOW05	LOW01	LOW01	LOW03	LOW03	LOW02	LOW04\n"
+			+ "LOW01	HIGH08	LOW02	LOW01	LOW04	LOW05	LOW02\n"
+			+ "LOW05	HIGH07	LOW05	LOW03	LOW03	LOW01	LOW01\n"
+			+ "HIGH06	LOW04	HIGH06	LOW01	LOW01	LOW02	LOW05\n"
+			+ "LOW02	LOW02	LOW03	HIGH08	LOW04	LOW01	LOW03\n"
+			+ "LOW01	LOW01	LOW01	LOW03	LOW02	HIGH08	LOW05\n"
+			+ "HIGH07	LOW05	LOW05	LOW02	HIGH06	LOW01	HIGH06\n"
+			+ "LOW02	LOW02	LOW01	LOW01	LOW02	LOW02	LOW01\n"
+			+ "LOW04	LOW05	LOW02	LOW02	LOW01	LOW05	LOW02\n"
+			+ "LOW05	LOW04	LOW01	LOW03	LOW02	LOW03	LOW01\n"
+			+ "LOW02	LOW03	HIGH07	LOW01	LOW01	LOW04	LOW02\n"
+			+ "LOW01	LOW01	LOW01	LOW05	LOW03	LOW01	HIGH06\n"
+			+ "LOW03	HIGH07	LOW04	HIGH06	LOW01	LOW03	HIGH07\n"
+			+ "LOW04	LOW01	LOW02	LOW02	LOW02	LOW01	LOW03\n"
+			+ "LOW03	LOW05	LOW01	LOW04	LOW05	LOW03	LOW02\n"
+			+ "LOW01	LOW02	LOW04	HIGH07	LOW02	LOW04	LOW04\n"
+			+ "LOW02	LOW04	LOW02	LOW05	LOW03	LOW01	LOW01\n"
+			+ "LOW01	LOW01	LOW04	LOW01	HIGH07	LOW02	HIGH08\n"
+			+ "LOW03	LOW03	LOW01	LOW05	LOW01	LOW04	LOW02\n"
+			+ "LOW01	LOW01	HIGH07	LOW02	LOW04	LOW02	LOW01\n"
+			+ "HIGH08	LOW03	HIGH06	LOW05	LOW03	LOW01	LOW03\n"
+			+ "HIGH06	LOW04	LOW03	LOW01	LOW01	LOW04	LOW05\n"
+			+ "HIGH08	LOW05	LOW04	LOW04	HIGH06	LOW01	LOW02\n"
+			+ "LOW01	HIGH08	HIGH06	LOW02	LOW04	HIGH07	HIGH06\n"
+			+ "HIGH07	LOW03	LOW05	HIGH06	LOW03	LOW04	LOW05\n"
+			+ "LOW05	HIGH06	LOW01	LOW01	LOW01	LOW05	LOW01\n"
+			+ "LOW02	LOW02	LOW04	LOW05	LOW02	LOW03	HIGH08\n"
+			+ "LOW01	LOW03	LOW02	HIGH06	LOW01	LOW02	LOW03\n"
+			+ "LOW04	LOW01	LOW03	LOW04	LOW04	LOW01	LOW01\n"
+			+ "LOW01	HIGH09	LOW05	LOW03	LOW02	LOW03	HIGH07\n"
+			+ "LOW03	LOW01	HIGH06	LOW01	LOW05	HIGH06	LOW02\n"
+			+ "LOW02	LOW02	LOW03	LOW04	LOW03	HIGH07	LOW01\n"
+			+ "LOW03	LOW01	LOW01	LOW03	LOW01	LOW02	LOW02\n"
+			+ "LOW02	HIGH06	LOW04	LOW04	LOW05	HIGH08	LOW01\n"
+			+ "LOW01	LOW01	LOW01	LOW02	HIGH08	LOW05	LOW03\n"
+			+ "LOW04	LOW02	HIGH07	LOW01	HIGH07	LOW02	LOW02\n"
+			+ "HIGH06	LOW03	HIGH08	LOW02	LOW04	LOW04	LOW04\n"
+			+ "LOW04	LOW02	LOW04	LOW03	LOW01	HIGH07	LOW02\n"
+			+ "LOW05	LOW03	LOW02	LOW02	LOW05	HIGH06	HIGH09\n"
+			+ "LOW01	LOW05	LOW03	HIGH07	HIGH06	LOW01	LOW03\n"
+			+ "HIGH07	LOW03	HIGH08	LOW04	LOW05	LOW05	LOW01\n"
+			+ "HIGH06	LOW01	LOW05	LOW02	LOW01	LOW04	LOW04\n"
+			+ "LOW03	HIGH06	LOW02	HIGH06	HIGH08	LOW03	LOW01\n"
+			+ "LOW01	LOW02	LOW01	LOW01	LOW04	LOW01	LOW04\n"
+			+ "LOW04	HIGH07	LOW05	LOW04	LOW02	LOW03	HIGH07\n"
+			+ "LOW02	HIGH06	LOW03	LOW01	LOW05	LOW04	LOW01\n" + "";
 
 	/** Static members initialization. */
 	static {
@@ -222,7 +256,8 @@ public class Main {
 			for (int j = 0; j < length; j++) {
 				REELS[i][j] = null;
 				for (Symbol value : SYMBOLS) {
-					if (values.get(i + NUMBER_OF_COLUMNS * j).equals(value.name()) == false) {
+					if (values.get(i + NUMBER_OF_COLUMNS * j)
+							.equals(value.name()) == false) {
 						continue;
 					}
 
@@ -242,9 +277,12 @@ public class Main {
 	/**
 	 * Single reels spin to fill the view with symbols.
 	 *
-	 * @param view  Screen with symbols reference.
-	 * @param reels Reels strips reference.
-	 * @param stops Indices of the reels stops.
+	 * @param view
+	 *            Screen with symbols reference.
+	 * @param reels
+	 *            Reels strips reference.
+	 * @param stops
+	 *            Indices of the reels stops.
 	 */
 	private static void spin(Symbol[][] view, Symbol[][] reels, int stops[]) {
 		/* Loop over each reel. */
@@ -262,9 +300,12 @@ public class Main {
 	/**
 	 * Single reels additional fill the view with symbols.
 	 *
-	 * @param view  Screen with symbols reference.
-	 * @param reels Reels strips reference.
-	 * @param stops Indices of the reels stops.
+	 * @param view
+	 *            Screen with symbols reference.
+	 * @param reels
+	 *            Reels strips reference.
+	 * @param stops
+	 *            Indices of the reels stops.
 	 */
 	private static void respin(Symbol[][] view, Symbol[][] reels, int stops[]) {
 		/* Loop over each reel. */
@@ -292,18 +333,24 @@ public class Main {
 	/**
 	 * Recursive procedure for clusters identification.
 	 * 
-	 * @param bitmask     Output matrix with markings.
-	 * @param view        Game screen with symbols.
-	 * @param x           Coordinates of the central cell.
-	 * @param y           Coordinates of the central cell.
-	 * @param symbol      The symbol of the cluster.
-	 * @param coordinates List of coordinates for the cells which are part of the
-	 *                    cluster.
+	 * @param bitmask
+	 *            Output matrix with markings.
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param x
+	 *            Coordinates of the central cell.
+	 * @param y
+	 *            Coordinates of the central cell.
+	 * @param symbol
+	 *            The symbol of the cluster.
+	 * @param coordinates
+	 *            List of coordinates for the cells which are part of the
+	 *            cluster.
 	 * 
 	 * @return Count of symbols part of the cluster.
 	 */
-	private static int mark(int[][] bitmask, Symbol[][] view, int x, int y, Symbol symbol,
-			List<SimpleEntry<Integer, Integer>> coordinates) {
+	private static int mark(int[][] bitmask, Symbol[][] view, int x, int y,
+			Symbol symbol, List<SimpleEntry<Integer, Integer>> coordinates) {
 		if (bitmask == null) {
 			return 0;
 		}
@@ -338,9 +385,11 @@ public class Main {
 		}
 
 		/*
-		 * If the symbol is not same as the cluster's one or wild do not handle it.
+		 * If the symbol is not same as the cluster's one or wild do not handle
+		 * it.
 		 */
-		if (view[x][y].id() != symbol.id() && view[x][y].kind() != Symbol.Kind.WILD) {
+		if (view[x][y].id() != symbol.id()
+				&& view[x][y].kind() != Symbol.Kind.WILD) {
 			return 0;
 		}
 
@@ -361,10 +410,11 @@ public class Main {
 	}
 
 	/**
-	 * Mark clusters with different numbers. If there is no cluster in cell zero is
-	 * written.
+	 * Mark clusters with different numbers. If there is no cluster in cell zero
+	 * is written.
 	 * 
-	 * @param view Game screen with symbols.
+	 * @param view
+	 *            Game screen with symbols.
 	 * 
 	 * @return Clusters information as symbol and count of occurrences.
 	 */
@@ -391,8 +441,8 @@ public class Main {
 				}
 
 				/*
-				 * Clear cluster flags for wilds because they need to participate in other
-				 * clusters.
+				 * Clear cluster flags for wilds because they need to
+				 * participate in other clusters.
 				 */
 				for (int k = 0; k < bitmask.length; k++) {
 					for (int l = 0; l < bitmask[k].length; l++) {
@@ -408,14 +458,17 @@ public class Main {
 				coordinates.add(new SimpleEntry<Integer, Integer>(i, j));
 
 				/* Calculate the size of the cluster. */
-				int count = 1 + mark(bitmask, view, i + 1, j, view[i][j], coordinates)
+				int count = 1
+						+ mark(bitmask, view, i + 1, j, view[i][j], coordinates)
 						+ mark(bitmask, view, i - 1, j, view[i][j], coordinates)
 						+ mark(bitmask, view, i, j + 1, view[i][j], coordinates)
-						+ mark(bitmask, view, i, j - 1, view[i][j], coordinates);
+						+ mark(bitmask, view, i, j - 1, view[i][j],
+								coordinates);
 
 				if (count > 1) {
 					/* Keep track of the information for the found cluster. */
-					Cluster cluster = new Cluster(view[i][j], i, j, count, coordinates);
+					Cluster cluster = new Cluster(view[i][j], i, j, count,
+							coordinates);
 					if (result.contains(cluster) == false) {
 						result.add(cluster);
 					}
@@ -429,11 +482,15 @@ public class Main {
 	/**
 	 * Remove a cluster from the screen.
 	 * 
-	 * @param cluster The cluster to be removed.
-	 * @param view    Game screen model reference.
-	 * @param wilds   A cluster of wilds flag.
+	 * @param cluster
+	 *            The cluster to be removed.
+	 * @param view
+	 *            Game screen model reference.
+	 * @param wilds
+	 *            A cluster of wilds flag.
 	 */
-	private static void remove(Cluster cluster, Symbol[][] view, boolean wilds) {
+	private static void remove(Cluster cluster, Symbol[][] view,
+			boolean wilds) {
 		for (SimpleEntry<Integer, Integer> cell : cluster.coordinates()) {
 			/* Do not handle empty cells. */
 			if (view[cell.getKey()][cell.getValue()] == null) {
@@ -441,7 +498,8 @@ public class Main {
 			}
 
 			/* Wilds are not removed when the flag is low. */
-			if (view[cell.getKey()][cell.getValue()].kind() == Symbol.Kind.WILD && wilds == false) {
+			if (view[cell.getKey()][cell.getValue()].kind() == Symbol.Kind.WILD
+					&& wilds == false) {
 				continue;
 			}
 
@@ -454,12 +512,16 @@ public class Main {
 	/**
 	 * Collect win.
 	 * 
-	 * @param bet      Total bet in the game to be multiplied with the coefficient
-	 *                 for each cluster.
-	 * @param view     Game screen with symbols.
-	 * @param clusters List of clusters information.
+	 * @param bet
+	 *            Total bet in the game to be multiplied with the coefficient
+	 *            for each cluster.
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param clusters
+	 *            List of clusters information.
 	 */
-	private static List<Win> collect(double bet, Symbol[][] view, List<Cluster> clusters) {
+	private static List<Win> collect(double bet, Symbol[][] view,
+			List<Cluster> clusters) {
 		List<Win> result = new ArrayList<Win>();
 
 		/* Collect each cluster separately. */
@@ -474,10 +536,12 @@ public class Main {
 				remove(cluster, view, false);
 
 				/*
-				 * High paying symbols generate wild(s) in the space of the winning cluster.
+				 * High paying symbols generate wild(s) in the space of the
+				 * winning cluster.
 				 */
 				if (cluster.symbol().kind() == Symbol.Kind.HIGH) {
-					for (SimpleEntry<Integer, Integer> coordinate : cluster.wilds()) {
+					for (SimpleEntry<Integer, Integer> coordinate : cluster
+							.wilds()) {
 						view[coordinate.getKey()][coordinate.getValue()] = WILD;
 					}
 				}
@@ -490,7 +554,8 @@ public class Main {
 	/**
 	 * Pack screen after clusters removal.
 	 * 
-	 * @param view Game screen with symbols.
+	 * @param view
+	 *            Game screen with symbols.
 	 */
 	private static void pack(Symbol[][] view) {
 		/* Do the packing column by column. */
@@ -524,8 +589,10 @@ public class Main {
 	/**
 	 * Manipulate the game screen according to dragons rules.
 	 * 
-	 * @param view     Game screen with symbols.
-	 * @param clusters List of clusters information.
+	 * @param view
+	 *            Game screen with symbols.
+	 * @param clusters
+	 *            List of clusters information.
 	 * 
 	 * @return True if dragons ran, false otherwise.
 	 */
@@ -555,7 +622,8 @@ public class Main {
 	/**
 	 * Application single entry point method.
 	 * 
-	 * @param args Command line arguments.
+	 * @param args
+	 *            Command line arguments.
 	 */
 	public static void main(String[] args) {
 		double totalBet = 1;
@@ -586,6 +654,12 @@ public class Main {
 					paid = collect(totalBet, view, clusters);
 					pack(view);
 					respin(view, REELS, stops);
+
+					/* Register wins. */
+					for (Win won : paid) {
+						wonMoney += won.win();
+						totalWin += won.win();
+					}
 				} while (paid.size() > 0);
 
 				/* Run the bonus feature by checking for dragons. */
@@ -594,20 +668,15 @@ public class Main {
 					pack(view);
 					respin(view, REELS, stops);
 				}
-
-				/* Register wins. */
-				for (Win won : paid) {
-					wonMoney += won.win();
-					totalWin += won.win();
-				}
 			} while (bonus == true);
 
 			/* Report progress. */
-			if (time + 1000 * 10 < System.currentTimeMillis()) {
+			if (time + 1000 * REPORT_PER_SECONDS < System.currentTimeMillis()) {
 				time = System.currentTimeMillis();
 
 				System.out.print("[");
-				System.out.print(String.format("%3d", (100 * numberOfRuns / TOTAL_RUNS)));
+				System.out.print(String.format("%3d",
+						(100 * numberOfRuns / TOTAL_RUNS)));
 				System.out.print("% ]");
 				System.out.print("\t");
 				System.out.print(wonMoney / lostMoney);
@@ -630,12 +699,12 @@ public class Main {
 
 		System.out.print("Total Won Money:");
 		System.out.print("\t");
-		System.out.print(wonMoney);
+		System.out.print(String.format("%12.2f",wonMoney));
 		System.out.print("\n");
 
 		System.out.print("Total Lost Money:");
 		System.out.print("\t");
-		System.out.print(lostMoney);
+		System.out.print(String.format("%12.2f",lostMoney));
 		System.out.print("\n");
 
 		System.out.print("\n");
