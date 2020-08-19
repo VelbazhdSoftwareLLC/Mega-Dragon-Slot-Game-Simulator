@@ -18,9 +18,9 @@ public class Main {
 
 	/** A total number of Monte-Carlo simulation game runs. */
 	private static long TOTAL_RUNS = 10_000_000;
-	
+
 	/** Number of seconds for reporting. */
-	private static long REPORT_PER_SECONDS = 10;
+	private static long REPORT_PER_SECONDS = 1;
 
 	/** List of all possible symbols in the game. */
 	private static final List<Symbol> SYMBOLS = new ArrayList<Symbol>();
@@ -98,7 +98,7 @@ public class Main {
 			+ "LOW03	HIGH06	LOW02	HIGH06	HIGH08	LOW03	LOW01\n"
 			+ "LOW01	LOW02	LOW01	LOW01	LOW04	LOW01	LOW04\n"
 			+ "LOW04	HIGH07	LOW05	LOW04	LOW02	LOW03	HIGH07\n"
-			+ "LOW02	HIGH06	LOW03	LOW01	LOW05	LOW04	LOW01\n" + "";
+			+ "LOW02	HIGH06	LOW03	LOW01	LOW05	LOW04	LOW01\n";
 
 	/** Static members initialization. */
 	static {
@@ -626,6 +626,11 @@ public class Main {
 	 *            Command line arguments.
 	 */
 	public static void main(String[] args) {
+		// System.err.println(SYMBOLS);
+		// System.err.println(Arrays.deepToString(REELS).replace("[[", "")
+		// .replace("]]", "").replace("],", "\n").replace(" [", "")
+		// .replace(",", "\t").replace(" ", ""));
+
 		double totalBet = 1;
 		double totalWin = 0;
 
@@ -699,12 +704,12 @@ public class Main {
 
 		System.out.print("Total Won Money:");
 		System.out.print("\t");
-		System.out.print(String.format("%12.2f",wonMoney));
+		System.out.print(String.format("%12.2f", wonMoney));
 		System.out.print("\n");
 
 		System.out.print("Total Lost Money:");
 		System.out.print("\t");
-		System.out.print(String.format("%12.2f",lostMoney));
+		System.out.print(String.format("%12.2f", lostMoney));
 		System.out.print("\n");
 
 		System.out.print("\n");
@@ -714,28 +719,23 @@ public class Main {
 		System.out.print(wonMoney / lostMoney);
 		System.out.print("\n");
 
-		// System.out.println(SYMBOLS);
-		// System.out.println(Arrays.deepToString(REELS).replace("[[",
-		// "").replace("]]", "")
-		// .replace("],", "\n").replace(" [", "").replace(",", "\t"));
-
-		// System.out.println();
-		// System.out.println(Arrays.deepToString(view).replace("[[", "")
+		// System.err.println();
+		// System.err.println(Arrays.deepToString(view).replace("[[", "")
 		// .replace("]]", "").replace("],", "\n").replace(" [", "")
 		// .replace(",", "\t"));
 
-		// System.out.println();
-		// System.out.println(clusters.toString().replace("[", "").replace("]",
+		// System.err.println();
+		// System.err.println(clusters.toString().replace("[", "").replace("]",
 		// "")
 		// .replace(", ", "\n" + "").replace(" ", "\t"));
 
-		// System.out.println();
-		// System.out.println(Arrays.deepToString(bitmask).replace("[[", "")
+		// System.err.println();
+		// System.err.println(Arrays.deepToString(bitmask).replace("[[", "")
 		// .replace("]]", "").replace("],", "\n").replace(" [", "")
 		// .replace(",", "\t"));
 
-		// System.out.println();
-		// System.out.println(paid.toString().replace("[[", "").replace("]]",
+		// System.err.println();
+		// System.err.println(paid.toString().replace("[[", "").replace("]]",
 		// "")
 		// .replace("],", "\n").replace(" [", "").replace(",", "\t"));
 	}
