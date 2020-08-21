@@ -4,6 +4,7 @@ import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -620,6 +621,105 @@ public class Main {
 	}
 
 	/**
+	 * Shuffle single reel in groups according to given size for high and low
+	 * symbols.
+	 * 
+	 * @param reel
+	 *            Array with single reel.
+	 * @param high
+	 *            Size of the high symbols group.
+	 * @param low
+	 *            Size of the low symbols group.
+	 */
+	private static void shuffle(Symbol[] reel, int high, int low) {
+		List<List<Symbol>> groups = new ArrayList<List<Symbol>>();
+
+		/* Prepare group container. */
+		List<Symbol> group = new ArrayList<Symbol>();
+
+		Arrays.sort(reel);
+		for (Symbol symbol : reel) {
+			/* Start new group if the current one is full. */
+			if (symbol.kind() == Symbol.Kind.HIGH && group.size() >= high) {
+				groups.add(group);
+				group = new ArrayList<Symbol>();
+			}
+
+			/* Start new group if the current one is full. */
+			if (symbol.kind() == Symbol.Kind.LOW && group.size() >= low) {
+				groups.add(group);
+				group = new ArrayList<Symbol>();
+			}
+
+			/*
+			 * If there is a start of a new group when the previous one is not
+			 * finished, just start it.
+			 */
+			if (group.size() > 0 && symbol != group.get(0)) {
+				groups.add(group);
+				group = new ArrayList<Symbol>();
+			}
+
+			group.add(symbol);
+		}
+
+		/* Add an unadded group. */
+		if (group.size() > 0) {
+			groups.add(group);
+		}
+
+		/* Shuffle groups. */
+		Collections.shuffle(groups);
+
+		/* Extra shuffle for repeats. */
+		boolean repeats = true;
+		while (repeats == true) {
+			repeats = false;
+
+			for (int i = 0; i < groups.size(); i++) {
+				/* If groups are different do nothing. */
+				if (groups.get(i).get(0) != groups.get((i + 1) % groups.size())
+						.get(0)) {
+					continue;
+				}
+
+				/* Extra shuffle. */
+				group = groups.get(i);
+				groups.remove(i);
+				groups.add(i + PRNG.nextInt(groups.size() - i), group);
+				// groups.add(group);
+
+				repeats = true;
+			}
+		}
+
+		/*  */
+		int i = 0;
+		for (List<Symbol> list : groups) {
+			for (Symbol symbol : list) {
+				reel[i] = symbol;
+				i++;
+			}
+		}
+	}
+
+	/**
+	 * Shuffle reels in groups according to given size for high and low symbols.
+	 * 
+	 * @param reels
+	 *            Array with symbols reels.
+	 * @param high
+	 *            Size of the high symbols group.
+	 * @param low
+	 *            Size of the low symbols group.
+	 */
+	private static void shuffle(Symbol[][] reels, int high, int low) {
+		for (Symbol reel[] : reels) {
+			shuffle(reel, high, low);
+		}
+	}
+
+	/**
 	 * Application single entry point method.
 	 * 
 	 * @param args
@@ -627,9 +727,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// System.err.println(SYMBOLS);
-		// System.err.println(Arrays.deepToString(REELS).replace("[[", "")
-		// .replace("]]", "").replace("],", "\n").replace(" [", "")
-		// .replace(",", "\t").replace(" ", ""));
+
+		shuffle(REELS, 2, 3);
+		System.err.println(Arrays.deepToString(REELS).replace("[[", "")
+				.replace("]]", "").replace("],", "\n").replace(" [", "")
+				.replace(",", "\t").replace(" ", ""));
 
 		double totalBet = 1;
 		double totalWin = 0;
