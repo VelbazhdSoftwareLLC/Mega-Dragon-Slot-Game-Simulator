@@ -135,8 +135,7 @@ final class GoldBehavior implements Behavior {
 			int j = PRNG.nextInt(view[i].length);
 
 			/* Transform only low paying symbols. */
-			if (view[i][j]!= null && 
-					view[i][j].kind() != Symbol.Kind.LOW) {
+			if (view[i][j] != null && view[i][j].kind() != Symbol.Kind.LOW) {
 				continue;
 			}
 
@@ -161,14 +160,15 @@ final class RedBehavior implements Behavior {
 		int i = -1, di = 0;
 		int j = -1, dj = 0;
 
-		/* Find a high paying symbol. */
-		do {
-			i = PRNG.nextInt(view.length);
-			j = PRNG.nextInt(view[i].length);
-		} while (view[i][j]!=null && view[i][j].kind() != Symbol.Kind.HIGH);
-
 		/* Select a random direction in which symbol to expand. */
 		do {
+			/* Find a high paying symbol. */
+			do {
+				i = PRNG.nextInt(view.length);
+				j = PRNG.nextInt(view[i].length);
+			} while (view[i][j] != null
+					&& view[i][j].kind() != Symbol.Kind.HIGH);
+
 			switch (PRNG.nextInt(4)) {
 				case 0 :
 					di = -1;
