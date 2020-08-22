@@ -152,11 +152,11 @@ final class Symbol implements Comparable {
 		double result = 0;
 
 		for (Integer key : this.pays.keySet()) {
-			result += this.pays.get(key);
+			result += key * this.pays.get(key);
 		}
 
 		for (Integer key : that.pays.keySet()) {
-			result -= that.pays.get(key);
+			result -= key * that.pays.get(key);
 		}
 
 		return (int) result;

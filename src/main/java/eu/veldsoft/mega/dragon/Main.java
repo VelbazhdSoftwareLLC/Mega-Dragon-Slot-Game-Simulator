@@ -42,64 +42,85 @@ public class Main {
 	private static final Symbol REELS[][] = new Symbol[NUMBER_OF_COLUMNS][];
 
 	/** The text representation of the reels. */
-	private static final String REELS_TEXT = "LOW03	LOW04	LOW01	LOW03	LOW02	LOW02	LOW03\n"
-			+ "LOW04	LOW01	LOW02	LOW01	LOW01	LOW05	LOW01\n"
-			+ "LOW03	LOW03	LOW04	HIGH08	LOW03	LOW01	LOW04\n"
-			+ "LOW02	LOW05	LOW03	LOW02	LOW01	LOW02	LOW01\n"
-			+ "LOW03	LOW01	LOW01	HIGH09	HIGH09	HIGH06	LOW02\n"
-			+ "LOW01	LOW04	LOW02	HIGH07	LOW02	LOW03	LOW05\n"
-			+ "LOW05	LOW02	LOW03	LOW01	LOW04	HIGH06	LOW04\n"
-			+ "LOW02	LOW04	LOW02	LOW03	LOW02	LOW03	LOW03\n"
-			+ "HIGH09	LOW02	LOW01	LOW01	LOW01	LOW02	LOW05\n"
-			+ "LOW02	LOW01	LOW03	LOW02	HIGH07	LOW01	LOW04\n"
-			+ "LOW04	LOW04	HIGH09	LOW05	LOW03	HIGH09	LOW03\n"
-			+ "LOW01	LOW02	LOW02	LOW04	HIGH06	LOW01	HIGH06\n"
-			+ "LOW05	LOW01	LOW01	LOW03	LOW03	LOW02	LOW04\n"
-			+ "LOW01	HIGH08	LOW02	LOW01	LOW04	LOW05	LOW02\n"
-			+ "LOW05	HIGH07	LOW05	LOW03	LOW03	LOW01	LOW01\n"
-			+ "HIGH06	LOW04	HIGH06	LOW01	LOW01	LOW02	LOW05\n"
-			+ "LOW02	LOW02	LOW03	HIGH08	LOW04	LOW01	LOW03\n"
-			+ "LOW01	LOW01	LOW01	LOW03	LOW02	HIGH08	LOW05\n"
-			+ "HIGH07	LOW05	LOW05	LOW02	HIGH06	LOW01	HIGH06\n"
-			+ "LOW02	LOW02	LOW01	LOW01	LOW02	LOW02	LOW01\n"
-			+ "LOW04	LOW05	LOW02	LOW02	LOW01	LOW05	LOW02\n"
-			+ "LOW05	LOW04	LOW01	LOW03	LOW02	LOW03	LOW01\n"
-			+ "LOW02	LOW03	HIGH07	LOW01	LOW01	LOW04	LOW02\n"
-			+ "LOW01	LOW01	LOW01	LOW05	LOW03	LOW01	HIGH06\n"
-			+ "LOW03	HIGH07	LOW04	HIGH06	LOW01	LOW03	HIGH07\n"
-			+ "LOW04	LOW01	LOW02	LOW02	LOW02	LOW01	LOW03\n"
-			+ "LOW03	LOW05	LOW01	LOW04	LOW05	LOW03	LOW02\n"
-			+ "LOW01	LOW02	LOW04	HIGH07	LOW02	LOW04	LOW04\n"
-			+ "LOW02	LOW04	LOW02	LOW05	LOW03	LOW01	LOW01\n"
-			+ "LOW01	LOW01	LOW04	LOW01	HIGH07	LOW02	HIGH08\n"
-			+ "LOW03	LOW03	LOW01	LOW05	LOW01	LOW04	LOW02\n"
-			+ "LOW01	LOW01	HIGH07	LOW02	LOW04	LOW02	LOW01\n"
-			+ "HIGH08	LOW03	HIGH06	LOW05	LOW03	LOW01	LOW03\n"
-			+ "HIGH06	LOW04	LOW03	LOW01	LOW01	LOW04	LOW05\n"
-			+ "HIGH08	LOW05	LOW04	LOW04	HIGH06	LOW01	LOW02\n"
-			+ "LOW01	HIGH08	HIGH06	LOW02	LOW04	HIGH07	HIGH06\n"
-			+ "HIGH07	LOW03	LOW05	HIGH06	LOW03	LOW04	LOW05\n"
-			+ "LOW05	HIGH06	LOW01	LOW01	LOW01	LOW05	LOW01\n"
-			+ "LOW02	LOW02	LOW04	LOW05	LOW02	LOW03	HIGH08\n"
-			+ "LOW01	LOW03	LOW02	HIGH06	LOW01	LOW02	LOW03\n"
-			+ "LOW04	LOW01	LOW03	LOW04	LOW04	LOW01	LOW01\n"
-			+ "LOW01	HIGH09	LOW05	LOW03	LOW02	LOW03	HIGH07\n"
-			+ "LOW03	LOW01	HIGH06	LOW01	LOW05	HIGH06	LOW02\n"
-			+ "LOW02	LOW02	LOW03	LOW04	LOW03	HIGH07	LOW01\n"
-			+ "LOW03	LOW01	LOW01	LOW03	LOW01	LOW02	LOW02\n"
-			+ "LOW02	HIGH06	LOW04	LOW04	LOW05	HIGH08	LOW01\n"
-			+ "LOW01	LOW01	LOW01	LOW02	HIGH08	LOW05	LOW03\n"
-			+ "LOW04	LOW02	HIGH07	LOW01	HIGH07	LOW02	LOW02\n"
-			+ "HIGH06	LOW03	HIGH08	LOW02	LOW04	LOW04	LOW04\n"
-			+ "LOW04	LOW02	LOW04	LOW03	LOW01	HIGH07	LOW02\n"
-			+ "LOW05	LOW03	LOW02	LOW02	LOW05	HIGH06	HIGH09\n"
-			+ "LOW01	LOW05	LOW03	HIGH07	HIGH06	LOW01	LOW03\n"
-			+ "HIGH07	LOW03	HIGH08	LOW04	LOW05	LOW05	LOW01\n"
-			+ "HIGH06	LOW01	LOW05	LOW02	LOW01	LOW04	LOW04\n"
-			+ "LOW03	HIGH06	LOW02	HIGH06	HIGH08	LOW03	LOW01\n"
-			+ "LOW01	LOW02	LOW01	LOW01	LOW04	LOW01	LOW04\n"
-			+ "LOW04	HIGH07	LOW05	LOW04	LOW02	LOW03	HIGH07\n"
-			+ "LOW02	HIGH06	LOW03	LOW01	LOW05	LOW04	LOW01\n";
+	private static final String REELS_TEXT = "LOW03	LOW04	HIGH09	LOW02	LOW02	LOW05	LOW02\n" + 
+			"LOW03	LOW04	HIGH09	LOW02	LOW02	LOW05	LOW02\n" + 
+			"LOW01	LOW03	LOW02	LOW04	LOW04	LOW03	HIGH09\n" + 
+			"LOW01	LOW03	LOW02	LOW04	LOW04	LOW03	HIGH09\n" + 
+			"LOW02	LOW02	LOW03	HIGH09	LOW01	HIGH08	HIGH06\n" + 
+			"LOW02	LOW02	LOW03	HIGH09	LOW01	HIGH08	HIGH06\n" + 
+			"LOW01	LOW03	LOW01	LOW05	LOW02	HIGH07	LOW01\n" + 
+			"LOW01	LOW03	LOW01	LOW05	LOW02	HIGH07	LOW01\n" + 
+			"HIGH09	LOW05	HIGH08	LOW02	LOW04	LOW01	LOW03\n" + 
+			"HIGH09	LOW05	HIGH08	LOW02	LOW04	LOW01	LOW03\n" + 
+			"HIGH07	LOW01	LOW04	LOW05	HIGH09	HIGH06	LOW02\n" + 
+			"HIGH07	LOW01	LOW04	LOW05	HIGH09	HIGH06	LOW02\n" + 
+			"HIGH08	HIGH08	LOW03	HIGH09	LOW01	LOW02	HIGH06\n" + 
+			"HIGH08	HIGH08	LOW03	HIGH09	LOW01	LOW02	HIGH06\n" + 
+			"LOW04	LOW03	LOW04	LOW03	LOW03	LOW01	LOW01\n" + 
+			"LOW04	LOW03	LOW04	LOW03	LOW03	LOW01	LOW01\n" + 
+			"LOW01	LOW01	HIGH06	LOW05	LOW01	LOW04	HIGH06\n" + 
+			"LOW01	LOW01	HIGH06	LOW05	LOW01	LOW04	HIGH06\n" + 
+			"LOW02	HIGH07	LOW01	HIGH08	LOW03	LOW03	HIGH08\n" + 
+			"LOW02	HIGH07	LOW01	HIGH08	LOW03	LOW03	HIGH08\n" + 
+			"HIGH09	LOW02	HIGH07	LOW03	HIGH06	LOW05	HIGH07\n" + 
+			"HIGH09	LOW02	HIGH07	LOW03	HIGH06	LOW05	HIGH07\n" + 
+			"LOW04	LOW05	LOW05	LOW04	LOW05	HIGH07	LOW03\n" + 
+			"LOW04	LOW05	LOW05	LOW04	LOW05	HIGH07	LOW03\n" + 
+			"LOW03	LOW03	LOW04	LOW01	HIGH06	HIGH08	LOW04\n" + 
+			"LOW03	LOW03	LOW04	LOW01	HIGH06	HIGH08	LOW04\n" + 
+			"LOW02	LOW04	HIGH06	LOW02	LOW01	LOW04	LOW03\n" + 
+			"LOW02	LOW04	HIGH06	LOW02	LOW01	LOW04	LOW03\n" + 
+			"LOW01	LOW02	LOW02	HIGH09	LOW04	LOW01	HIGH06\n" + 
+			"LOW01	LOW02	LOW02	HIGH09	LOW04	LOW01	HIGH06\n" + 
+			"LOW04	HIGH08	LOW03	HIGH06	LOW01	LOW03	LOW04\n" + 
+			"LOW04	HIGH08	LOW03	HIGH06	LOW01	LOW03	LOW04\n" + 
+			"LOW03	LOW02	LOW01	LOW02	HIGH07	LOW01	HIGH09\n" + 
+			"LOW03	LOW02	LOW01	LOW02	HIGH07	LOW01	HIGH09\n" + 
+			"LOW02	LOW01	HIGH09	LOW01	LOW03	HIGH09	LOW03\n" + 
+			"LOW02	LOW01	HIGH09	LOW01	LOW03	HIGH09	LOW03\n" + 
+			"LOW01	HIGH09	LOW05	HIGH06	LOW02	LOW05	LOW01\n" + 
+			"LOW01	HIGH09	LOW05	HIGH06	LOW02	LOW05	LOW01\n" + 
+			"LOW05	LOW02	HIGH06	LOW01	LOW01	HIGH07	LOW05\n" + 
+			"LOW05	LOW02	HIGH06	LOW01	LOW01	HIGH07	LOW05\n" + 
+			"HIGH06	HIGH06	LOW01	HIGH07	LOW05	HIGH08	LOW02\n" + 
+			"HIGH06	HIGH06	LOW01	HIGH07	LOW05	HIGH08	LOW02\n" + 
+			"HIGH07	LOW01	HIGH08	LOW01	HIGH08	HIGH06	LOW01\n" + 
+			"HIGH07	LOW01	HIGH08	LOW01	HIGH08	HIGH06	LOW01\n" + 
+			"HIGH06	HIGH06	LOW05	HIGH06	LOW02	LOW01	HIGH07\n" + 
+			"HIGH06	HIGH06	LOW05	HIGH06	LOW02	LOW01	HIGH07\n" + 
+			"HIGH08	LOW01	LOW03	LOW03	LOW05	LOW02	LOW05\n" + 
+			"HIGH08	LOW01	LOW03	LOW03	LOW05	LOW02	LOW05\n" + 
+			"LOW03	HIGH06	HIGH08	LOW01	HIGH06	HIGH09	HIGH08\n" + 
+			"LOW03	HIGH06	HIGH08	LOW01	HIGH06	HIGH09	HIGH08\n" + 
+			"LOW05	HIGH08	LOW02	LOW05	LOW01	LOW03	LOW04\n" + 
+			"LOW05	HIGH08	LOW02	LOW05	LOW01	LOW03	LOW04\n" + 
+			"HIGH07	LOW03	LOW01	LOW01	LOW02	LOW01	LOW03\n" + 
+			"HIGH07	LOW03	LOW01	LOW01	LOW02	LOW01	LOW03\n" + 
+			"HIGH06	LOW05	HIGH07	HIGH08	HIGH09	LOW02	HIGH08\n" + 
+			"HIGH06	LOW05	HIGH07	HIGH08	HIGH09	LOW02	HIGH08\n" + 
+			"HIGH08	LOW02	LOW02	LOW03	HIGH07	LOW04	LOW02\n" + 
+			"HIGH08	LOW02	LOW02	LOW03	HIGH07	LOW04	LOW02\n" + 
+			"LOW05	HIGH09	HIGH06	HIGH06	LOW03	LOW02	LOW01\n" + 
+			"LOW05	HIGH09	HIGH06	HIGH06	LOW03	LOW02	LOW01\n" + 
+			"LOW02	LOW05	LOW01	LOW02	HIGH09	HIGH06	LOW05\n" + 
+			"LOW02	LOW05	LOW01	LOW02	HIGH09	HIGH06	LOW05\n" + 
+			"HIGH09	HIGH07	HIGH09	HIGH08	HIGH06	HIGH09	LOW01\n" + 
+			"HIGH09	HIGH07	HIGH09	HIGH08	HIGH06	HIGH09	LOW01\n" + 
+			"LOW05	LOW01	LOW03	LOW01	HIGH07	LOW05	LOW02\n" + 
+			"LOW05	LOW01	LOW03	LOW01	HIGH07	LOW05	LOW02\n" + 
+			"LOW01	LOW04	HIGH07	HIGH07	LOW03	LOW02	HIGH07\n" + 
+			"LOW01	LOW04	HIGH07	HIGH07	LOW03	LOW02	HIGH07\n" + 
+			"LOW02	HIGH09	LOW05	LOW04	HIGH08	LOW01	HIGH09\n" + 
+			"LOW02	HIGH09	LOW05	LOW04	HIGH08	LOW01	HIGH09\n" + 
+			"LOW03	HIGH07	LOW02	LOW02	LOW04	LOW03	LOW01\n" + 
+			"LOW03	HIGH07	LOW02	LOW02	LOW04	LOW03	LOW01\n" + 
+			"LOW01	LOW04	LOW04	HIGH07	LOW05	LOW02	LOW02\n" + 
+			"LOW01	LOW04	LOW04	HIGH07	LOW05	LOW02	LOW02\n" + 
+			"HIGH06	LOW01	LOW01	LOW04	LOW02	LOW04	LOW04\n" + 
+			"HIGH06	LOW01	LOW01	LOW04	LOW02	LOW04	LOW04\n" + 
+			"LOW04	HIGH06	LOW02	LOW03	HIGH08	HIGH06	LOW05\n" + 
+			"LOW04	HIGH06	LOW02	LOW03	HIGH08	HIGH06	LOW05\n" + 
+			"";
 
 	/** Static members initialization. */
 	static {
@@ -420,7 +441,7 @@ public class Main {
 	 * @return Clusters information as symbol and count of occurrences.
 	 */
 	private static List<Cluster> mark(Symbol[][] view) {
-		/* List of clusters informatio. */
+		/* List of clusters information. */
 		List<Cluster> result = new ArrayList<Cluster>();
 
 		/* Clusters bit mask by id of the symbol. */
@@ -447,6 +468,10 @@ public class Main {
 				 */
 				for (int k = 0; k < bitmask.length; k++) {
 					for (int l = 0; l < bitmask[k].length; l++) {
+						if (view[k][l] == null) {
+							continue;
+						}
+
 						if (view[k][l].kind() == Symbol.Kind.WILD) {
 							bitmask[k][l] = -1;
 						}
@@ -608,7 +633,7 @@ public class Main {
 
 			/* Execute dragon behavior. */
 			Dragon dragon = Dragon.scramble();
-			dragon.execute(view, SYMBOLS, cluster.count());
+			dragon.execute(view, SYMBOLS, dragon.strength(cluster.count()));
 
 			/* Remove the cluster with wilds. */
 			remove(cluster, view, true);
@@ -686,14 +711,13 @@ public class Main {
 				/* Extra shuffle. */
 				group = groups.get(i);
 				groups.remove(i);
-				groups.add(i + PRNG.nextInt(groups.size() - i), group);
-				// groups.add(group);
+				groups.add(PRNG.nextInt(groups.size()), group);
 
 				repeats = true;
 			}
 		}
 
-		/*  */
+		/* Store the final result. */
 		int i = 0;
 		for (List<Symbol> list : groups) {
 			for (Symbol symbol : list) {
@@ -726,12 +750,14 @@ public class Main {
 	 *            Command line arguments.
 	 */
 	public static void main(String[] args) {
-		// System.err.println(SYMBOLS);
 
-		shuffle(REELS, 2, 3);
-		System.err.println(Arrays.deepToString(REELS).replace("[[", "")
-				.replace("]]", "").replace("],", "\n").replace(" [", "")
-				.replace(",", "\t").replace(" ", ""));
+		shuffle(REELS, 2, 2);
+
+//		System.err.println(Arrays.deepToString(REELS).replace("[[", "")
+//				.replace("]]", "").replace("],", "\n").replace(" [", "")
+//				.replace(",", "\t").replace(" ", ""));
+
+		// System.err.println(SYMBOLS);
 
 		double totalBet = 1;
 		double totalWin = 0;
@@ -752,30 +778,24 @@ public class Main {
 
 			/* Handle the results from the base game spin. */
 			boolean bonus = false;
+			// System.err.println("Test point 1 ...");
+			/* Run a regular game. */
+			List<Win> paid = null;
+			List<Cluster> clusters = null;
 			do {
-				/* Run a regular game. */
-				List<Win> paid = null;
-				List<Cluster> clusters = null;
-				do {
-					clusters = mark(view);
-					paid = collect(totalBet, view, clusters);
-					pack(view);
-					respin(view, REELS, stops);
+				clusters = mark(view);
+				paid = collect(totalBet, view, clusters);
+				pack(view);
+				respin(view, REELS, stops);
 
-					/* Register wins. */
-					for (Win won : paid) {
-						wonMoney += won.win();
-						totalWin += won.win();
-					}
-				} while (paid.size() > 0);
-
-				/* Run the bonus feature by checking for dragons. */
-				bonus = dragons(view, clusters);
-				if (bonus == true) {
-					pack(view);
-					respin(view, REELS, stops);
+				/* Register wins. */
+				for (Win won : paid) {
+					wonMoney += won.win();
+					totalWin += won.win();
 				}
-			} while (bonus == true);
+
+				bonus = dragons(view, clusters);
+			} while (paid.size() > 0);
 
 			/* Report progress. */
 			if (time + 1000 * REPORT_PER_SECONDS < System.currentTimeMillis()) {
@@ -786,11 +806,16 @@ public class Main {
 						(100 * numberOfRuns / TOTAL_RUNS)));
 				System.out.print("% ]");
 				System.out.print("\t");
-				System.out.print(wonMoney / lostMoney);
+				System.out.print("RTP: ");
+				System.out.print(
+						String.format("%5" + ".2f", 100 * wonMoney / lostMoney)
+								+ "%" + "");
 				System.out.print("\t");
-				System.out.print(wonMoney);
+				System.out.print("Win: ");
+				System.out.print(String.format("%15.2f", wonMoney));
 				System.out.print("\t");
-				System.out.print(lostMoney);
+				System.out.print("Loss: ");
+				System.out.print(String.format("%15.2f", lostMoney));
 				System.out.print("\n");
 			}
 		}

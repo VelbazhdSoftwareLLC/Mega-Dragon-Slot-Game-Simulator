@@ -14,12 +14,15 @@ interface Behavior {
 	static final Random PRNG = new Random();
 
 	/**
-	 * Dragon behavior is executed over game screen and it modifies it according to
-	 * the dragon's strength.
+	 * Dragon behavior is executed over game screen and it modifies it according
+	 * to the dragon's strength.
 	 * 
-	 * @param view     Game screen.
-	 * @param symbols  List of all possible symbols in the game.
-	 * @param strength Dragon strength.
+	 * @param view
+	 *            Game screen.
+	 * @param symbols
+	 *            List of all possible symbols in the game.
+	 * @param strength
+	 *            Dragon strength.
 	 */
 	void execute(Symbol[][] view, List<Symbol> symbols, int strength);
 }
@@ -36,10 +39,14 @@ final class GreenBehavior implements Behavior {
 	/**
 	 * A single dragon move for symbol replacement.
 	 * 
-	 * @param symbol Replacement symbol.
-	 * @param view   Game screen.
-	 * @param x      Current x position.
-	 * @param y      Current y position.
+	 * @param symbol
+	 *            Replacement symbol.
+	 * @param view
+	 *            Game screen.
+	 * @param x
+	 *            Current x position.
+	 * @param y
+	 *            Current y position.
 	 */
 	private void move(Symbol symbol, Symbol[][] view, int x, int y) {
 		/* If there is no more strength do not put more symbols. */
@@ -58,6 +65,11 @@ final class GreenBehavior implements Behavior {
 			return;
 		}
 		if (y >= view[x].length) {
+			return;
+		}
+
+		/* Do nothing in empty cells. */
+		if (view[x][y] == null) {
 			return;
 		}
 
@@ -86,7 +98,7 @@ final class GreenBehavior implements Behavior {
 		do {
 			i = PRNG.nextInt(view.length);
 			j = PRNG.nextInt(view[i].length);
-		} while (view[i][j].kind() != Symbol.Kind.HIGH);
+		} while (view[i][j] != null && view[i][j].kind() != Symbol.Kind.HIGH);
 
 		/* Start of symbols replacement. */
 		number = strength;
@@ -123,7 +135,8 @@ final class GoldBehavior implements Behavior {
 			int j = PRNG.nextInt(view[i].length);
 
 			/* Transform only low paying symbols. */
-			if (view[i][j].kind() != Symbol.Kind.LOW) {
+			if (view[i][j]!= null && 
+					view[i][j].kind() != Symbol.Kind.LOW) {
 				continue;
 			}
 
@@ -152,29 +165,30 @@ final class RedBehavior implements Behavior {
 		do {
 			i = PRNG.nextInt(view.length);
 			j = PRNG.nextInt(view[i].length);
-		} while (view[i][j].kind() != Symbol.Kind.HIGH);
+		} while (view[i][j]!=null && view[i][j].kind() != Symbol.Kind.HIGH);
 
 		/* Select a random direction in which symbol to expand. */
 		do {
 			switch (PRNG.nextInt(4)) {
-			case 0:
-				di = -1;
-				dj = -1;
-				break;
-			case 1:
-				di = +1;
-				dj = -1;
-				break;
-			case 2:
-				di = -1;
-				dj = +1;
-				break;
-			case 3:
-				di = +1;
-				dj = +1;
-				break;
+				case 0 :
+					di = -1;
+					dj = -1;
+					break;
+				case 1 :
+					di = +1;
+					dj = -1;
+					break;
+				case 2 :
+					di = -1;
+					dj = +1;
+					break;
+				case 3 :
+					di = +1;
+					dj = +1;
+					break;
 			}
-		} while (i + di * strength < 0 || j + dj * strength < 0 || i + di * strength >= view.length
+		} while (i + di * strength < 0 || j + dj * strength < 0
+				|| i + di * strength >= view.length
 				|| j + dj * strength >= view[i].length);
 
 		/* Expand the symbol. */
@@ -193,19 +207,20 @@ final class RedBehavior implements Behavior {
  */
 public enum Dragon {
 	/**
-	 * When the dragon is not presented this constant helps null pointer not to be
-	 * used.
+	 * When the dragon is not presented this constant helps null pointer not to
+	 * be used.
 	 */
-	NONE(0.0, new int[][] { {} }, null),
+	NONE(0.0, new int[][]{{}}, null),
 
 	/** Green dragon properties. */
-	GREEN(0.50, new int[][] { { 2, 3, 4 }, { 5, 6, 7 } }, new GreenBehavior()),
+	GREEN(0.50, new int[][]{{2, 3, 4}, {5, 6, 7}}, new GreenBehavior()),
 
 	/** Gold dragon properties. */
-	GOLD(0.35, new int[][] { { 2, 3, 4, 5, 6, 7 }, { 2, 3, 4, 5, 6, 7 } }, new GoldBehavior()),
+	GOLD(0.35, new int[][]{{2, 3, 4, 5, 6, 7}, {2, 3, 4, 5, 6, 7}},
+			new GoldBehavior()),
 
 	/** Red dragon properties. */
-	RED(0.15, new int[][] { { 2, 3, 4 }, { 2, 3, 4 } }, new RedBehavior());
+	RED(0.15, new int[][]{{2, 3, 4}, {2, 3, 4}}, new RedBehavior());
 
 	/** Pseudo-random number generator instance. */
 	private static final Random PRNG = new Random();
@@ -217,7 +232,8 @@ public enum Dragon {
 	private double probability = 0;
 
 	/**
-	 * Each dragon has different strength according to how many wilds triggered it
+	 * Each dragon has different strength according to how many wilds triggered
+	 * it
 	 */
 	private int strength[][] = new int[2][];
 
@@ -241,7 +257,8 @@ public enum Dragon {
 	 */
 	public static Dragon scramble() {
 		/*
-		 * Stop level in the cumulative function of the probability distribution.
+		 * Stop level in the cumulative function of the probability
+		 * distribution.
 		 */
 		double threshold = PRNG.nextDouble() * total;
 
@@ -261,12 +278,14 @@ public enum Dragon {
 	/**
 	 * A constructor with all fields as parameters.
 	 * 
-	 * @param probability The probability this particular dragon to appear.
-	 * @param strength    The dragon strength two-dimensional array. The first
-	 *                    dimension is the number of wilds used to trigger the
-	 *                    dragon. The second dimension is the response of the dragon
-	 *                    as its strength.
-	 * @param behavior    A functional object for dragon behavior.
+	 * @param probability
+	 *            The probability this particular dragon to appear.
+	 * @param strength
+	 *            The dragon strength two-dimensional array. The first dimension
+	 *            is the number of wilds used to trigger the dragon. The second
+	 *            dimension is the response of the dragon as its strength.
+	 * @param behavior
+	 *            A functional object for dragon behavior.
 	 */
 	private Dragon(double probability, int strength[][], Behavior behavior) {
 		this.probability = probability;
@@ -277,7 +296,8 @@ public enum Dragon {
 	/**
 	 * Get dragon strength according to how many wilds triggered it.
 	 * 
-	 * @param wilds The number of wilds which triggered the dragon.
+	 * @param wilds
+	 *            The number of wilds which triggered the dragon.
 	 * 
 	 * @return A dragon strength.
 	 */
@@ -285,8 +305,8 @@ public enum Dragon {
 		int result = 0;
 
 		/*
-		 * The number of wilds should be in ascending order and the highest possible is
-		 * found.
+		 * The number of wilds should be in ascending order and the highest
+		 * possible is found.
 		 */
 		for (int i = 0; i < strength[0].length && i < strength[1].length; i++) {
 			if (strength[0][i] < wilds) {
@@ -298,12 +318,15 @@ public enum Dragon {
 	}
 
 	/**
-	 * Dragon behavior is executed over game screen and it modifies it according to
-	 * the dragon's strength.
+	 * Dragon behavior is executed over game screen and it modifies it according
+	 * to the dragon's strength.
 	 * 
-	 * @param view     Game screen.
-	 * @param symbols  List of all possible symbols in the game.
-	 * @param strength Dragon strength.
+	 * @param view
+	 *            Game screen.
+	 * @param symbols
+	 *            List of all possible symbols in the game.
+	 * @param strength
+	 *            Dragon strength.
 	 */
 	public void execute(Symbol[][] view, List<Symbol> symbols, int strength) {
 		behavior.execute(view, symbols, strength);
